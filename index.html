@@ -1,0 +1,5005 @@
+<!DOCTYPE html>
+<html lang="es" data-tema="claro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Confirmación Docente · Facultad de Derecho UNAB</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+  :root {
+    --fondo: #f4f6fa;
+    --superficie: #ffffff;
+    --superficie-2: #f8fafc;
+    --borde: #e2e8f0;
+    --borde-fuerte: #cbd5e1;
+    --texto: #0f172a;
+    --texto-2: #475569;
+    --texto-3: #64748b;
+    --acento: #1e3a8a;
+    --acento-2: #0f766e;
+    --alerta: #b42318;
+    --alerta-fondo: #fef3f2;
+    --ok: #067647;
+    --ok-fondo: #ecfdf3;
+    --aviso: #b54708;
+    --aviso-fondo: #fffaeb;
+    --radio: 10px;
+    --sombra: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+    --fuente: "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --mono: "Cascadia Mono", "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  }
+
+  html[data-tema="oscuro"] {
+    --fondo: #0b1120;
+    --superficie: #111827;
+    --superficie-2: #1e293b;
+    --borde: #1f2937;
+    --borde-fuerte: #334155;
+    --texto: #f1f5f9;
+    --texto-2: #94a3b8;
+    --texto-3: #64748b;
+    --acento: #3b82f6;
+    --acento-2: #14b8a6;
+    --alerta: #f87171;
+    --alerta-fondo: rgba(180, 35, 24, 0.18);
+    --ok: #34d399;
+    --ok-fondo: rgba(6, 118, 71, 0.18);
+    --aviso: #fbbf24;
+    --aviso-fondo: rgba(181, 71, 8, 0.18);
+    --sombra: 0 4px 12px rgba(0, 0, 0, 0.35);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--fondo);
+    color: var(--texto);
+    font-family: var(--fuente);
+    font-size: 13.5px;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* Barra Superior */
+  header.barra {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 10px 22px;
+    background: color-mix(in srgb, var(--superficie) 88%, transparent);
+    backdrop-filter: saturate(180%) blur(14px);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    border-bottom: 1px solid var(--borde);
+    flex-wrap: wrap;
+  }
+
+  .marca {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 210px;
+    flex: 1 1 auto;
+  }
+
+  .logo {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: linear-gradient(135deg, var(--acento), #0f766e);
+    color: #fff;
+    font-weight: 700;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(30, 58, 138, 0.28);
+    flex-shrink: 0;
+  }
+
+  .titulos { min-width: 0; }
+  .titulos h1 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--texto);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .titulos p {
+    margin: 1px 0 0;
+    font-size: 11.5px;
+    color: var(--texto-2);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  nav.tabs {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--superficie-2);
+    padding: 4px;
+    border-radius: 9px;
+    border: 1px solid var(--borde);
+    flex-wrap: wrap;
+    max-width: 100%;
+  }
+
+  nav.tabs button {
+    appearance: none;
+    border: none;
+    background: transparent;
+    color: var(--texto-2);
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+  }
+
+  nav.tabs button:hover:not(:disabled) {
+    color: var(--texto);
+    background: color-mix(in srgb, var(--superficie) 60%, transparent);
+  }
+
+  nav.tabs button.activo {
+    background: var(--superficie);
+    color: var(--acento);
+    box-shadow: var(--sombra);
+  }
+
+  nav.tabs button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    font-size: 10.5px;
+    font-weight: 700;
+    border-radius: 99px;
+    background: var(--alerta-fondo);
+    color: var(--alerta);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .badge.info {
+    background: color-mix(in srgb, var(--acento) 14%, var(--superficie));
+    color: var(--acento);
+  }
+
+  .badge.ok {
+    background: var(--ok-fondo);
+    color: var(--ok);
+  }
+
+  .acciones-barra {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+  }
+
+  .btn-accion {
+    appearance: none;
+    border: 1px solid var(--borde-fuerte);
+    background: var(--superficie);
+    color: var(--texto);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+  }
+
+  .btn-accion:hover:not(:disabled) {
+    border-color: var(--acento);
+    color: var(--acento);
+  }
+
+  .btn-accion:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .btn-accion.primario {
+    background: var(--acento);
+    color: #fff;
+    border-color: var(--acento);
+  }
+
+  .btn-accion.primario:hover:not(:disabled) {
+    filter: brightness(1.1);
+    color: #fff;
+  }
+
+  .btn-accion.exito {
+    background: var(--ok);
+    color: #fff;
+    border-color: var(--ok);
+  }
+
+  .btn-accion.exito:hover:not(:disabled) {
+    filter: brightness(1.08);
+    color: #fff;
+  }
+
+  .btn-accion.secundario {
+    background: var(--superficie-2);
+  }
+
+  #tema {
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    justify-content: center;
+    font-size: 15px;
+  }
+
+  /* Contenedor Principal */
+  main.contenedor {
+    max-width: 1640px;
+    margin: 0 auto;
+    padding: 20px 22px 48px;
+  }
+
+  .vista { display: none; }
+  .vista.activa { display: block; }
+
+  /* Estado inicial sin archivo cargado */
+  .zona-carga-inicial {
+    max-width: 740px;
+    margin: 48px auto;
+    background: var(--superficie);
+    border: 2px dashed var(--borde-fuerte);
+    border-radius: 16px;
+    padding: 42px 32px;
+    text-align: center;
+    box-shadow: var(--sombra);
+    transition: all 0.2s ease;
+  }
+
+  .zona-carga-inicial.arrastrando {
+    border-color: var(--acento);
+    background: color-mix(in srgb, var(--acento) 5%, var(--superficie));
+  }
+
+  .icono-carga {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 16px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--acento), var(--acento-2));
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    font-weight: 700;
+  }
+
+  .zona-carga-inicial h2 {
+    margin: 0 0 8px;
+    font-size: 19px;
+    color: var(--texto);
+  }
+
+  .zona-carga-inicial p {
+    margin: 0 auto 22px;
+    max-width: 560px;
+    color: var(--texto-2);
+    font-size: 13.5px;
+  }
+
+  .chips-formatos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid var(--borde);
+  }
+
+  .chip-info {
+    font-size: 11.5px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: var(--superficie-2);
+    color: var(--texto-2);
+    border: 1px solid var(--borde);
+  }
+
+  /* Selector de archivos múltiples cargados */
+  .barra-archivos {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    box-shadow: var(--sombra);
+    flex-wrap: wrap;
+  }
+
+  .barra-archivos.visible { display: flex; }
+
+  .lista-archivos-tabs {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .chip-archivo {
+    appearance: none;
+    border: 1px solid var(--borde);
+    background: var(--superficie-2);
+    color: var(--texto-2);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 11px;
+    border-radius: 7px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .chip-archivo.activo {
+    background: var(--acento);
+    color: #fff;
+    border-color: var(--acento);
+  }
+
+  /* Tarjetas KPI */
+  .rejilla-kpi {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .kpi {
+    background: var(--superficie);
+    border: 1px solid var(--borde);
+    border-left: 3px solid hsl(var(--h, 220) 62% 52%);
+    border-radius: var(--radio);
+    padding: 13px 15px;
+    box-shadow: var(--sombra);
+    min-width: 0;
+  }
+
+  .kpi .etq {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--texto-2);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .kpi .val {
+    font-size: 27px;
+    font-weight: 700;
+    margin: 4px 0 2px;
+    font-variant-numeric: tabular-nums;
+    color: var(--texto);
+  }
+
+  .kpi .val.malo { color: var(--alerta); }
+  .kpi .val.bueno { color: var(--ok); }
+  .kpi .val.aviso { color: var(--aviso); }
+
+  .kpi .sub {
+    font-size: 11.5px;
+    color: var(--texto-3);
+  }
+
+  /* Paneles y Columnas */
+  .dos-columnas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .panel {
+    background: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    padding: 16px 18px;
+    box-shadow: var(--sombra);
+    margin-bottom: 16px;
+    min-width: 0;
+  }
+
+  .panel h2 {
+    margin: 0 0 12px;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .panel h2 span.sub-h2 {
+    font-size: 11.5px;
+    font-weight: 500;
+    color: var(--texto-2);
+  }
+
+  /* Barras de progreso */
+  .barras {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+
+  .barra-fila {
+    display: grid;
+    grid-template-columns: minmax(105px, 150px) 1fr 96px;
+    align-items: center;
+    gap: 10px;
+    font-size: 12.5px;
+  }
+
+  .barra-fila .nom {
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .barra-fila .pista {
+    height: 9px;
+    background: var(--superficie-2);
+    border-radius: 99px;
+    overflow: hidden;
+    border: 1px solid var(--borde);
+  }
+
+  .barra-fila .relleno {
+    display: block;
+    height: 100%;
+    border-radius: 99px;
+    background: hsl(var(--h, 212) 62% 50%);
+  }
+
+  .barra-fila .num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    color: var(--texto-2);
+    font-size: 12px;
+  }
+
+  /* Tablas */
+  .envoltorio-tabla {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    background: var(--superficie);
+  }
+
+  table.tabla, table.tabla-compacta {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+  }
+
+  table.tabla th, table.tabla td,
+  table.tabla-compacta th, table.tabla-compacta td {
+    padding: 8px 11px;
+    text-align: left;
+    border-bottom: 1px solid var(--borde);
+    vertical-align: middle;
+  }
+
+  table.tabla th, table.tabla-compacta th {
+    background: var(--superficie-2);
+    color: var(--texto-2);
+    font-weight: 600;
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+
+  table.tabla tbody tr:hover {
+    background: color-mix(in srgb, var(--acento) 4%, var(--superficie));
+    cursor: pointer;
+  }
+
+  table.tabla-compacta tr.fila-total td {
+    font-weight: 700;
+    background: var(--superficie-2);
+    border-top: 2px solid var(--borde-fuerte);
+  }
+
+  .mono {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .etiqueta-area {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    border-left: 3px solid hsl(var(--h, 212) 55% 45%);
+    background: hsl(var(--h, 212) 62% 94%);
+    color: hsl(var(--h, 212) 65% 24%);
+  }
+
+  html[data-tema="oscuro"] .etiqueta-area {
+    background: hsl(var(--h, 212) 45% 20%);
+    color: hsl(var(--h, 212) 80% 82%);
+  }
+
+  .pildora {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 99px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .pildora.ok { background: var(--ok-fondo); color: var(--ok); }
+  .pildora.alerta { background: var(--alerta-fondo); color: var(--alerta); }
+  .pildora.aviso { background: var(--aviso-fondo); color: var(--aviso); }
+  .pildora.neutro { background: var(--superficie-2); color: var(--texto-2); border: 1px solid var(--borde); }
+
+  /* Controles de filtro */
+  .controles-filtro {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 14px;
+    background: var(--superficie);
+    padding: 12px 14px;
+    border-radius: var(--radio);
+    border: 1px solid var(--borde);
+    box-shadow: var(--sombra);
+  }
+
+  .controles-filtro input[type="search"],
+  .controles-filtro select,
+  .controles-horario select {
+    padding: 6px 10px;
+    border-radius: 7px;
+    border: 1px solid var(--borde-fuerte);
+    background: var(--superficie);
+    color: var(--texto);
+    font-family: inherit;
+    font-size: 12.5px;
+    max-width: 100%;
+  }
+
+  .controles-filtro input[type="search"] {
+    min-width: 220px;
+    flex: 1 1 240px;
+  }
+
+  .contador-resultados {
+    margin-left: auto;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--texto-2);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Vista Horario M1-M20 */
+  .controles-horario {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+    background: var(--superficie);
+    padding: 10px 14px;
+    border-radius: var(--radio);
+    border: 1px solid var(--borde);
+    box-shadow: var(--sombra);
+  }
+
+  .grupo-controles-horario {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .segmento {
+    display: inline-flex;
+    background: var(--superficie-2);
+    padding: 3px;
+    border-radius: 8px;
+    border: 1px solid var(--borde);
+    flex-wrap: wrap;
+  }
+
+  .segmento button {
+    appearance: none;
+    border: none;
+    background: transparent;
+    color: var(--texto-2);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .segmento button.activo {
+    background: var(--superficie);
+    color: var(--acento);
+    box-shadow: var(--sombra);
+  }
+
+  .barra-herramientas-horario {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .control-zoom {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--superficie-2);
+    padding: 3px 6px;
+    border-radius: 8px;
+    border: 1px solid var(--borde);
+  }
+
+  .control-zoom button {
+    appearance: none;
+    border: 1px solid transparent;
+    background: var(--superficie);
+    color: var(--texto);
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    min-width: 26px;
+    height: 24px;
+    padding: 0 6px;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: var(--sombra);
+    transition: all 0.12s ease;
+  }
+
+  .control-zoom button:hover {
+    border-color: var(--acento);
+    color: var(--acento);
+  }
+
+  .control-zoom .zoom-valor {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    font-weight: 700;
+    min-width: 44px;
+    text-align: center;
+    color: var(--texto);
+  }
+
+  .grilla-envoltura {
+    max-height: calc(100vh - 235px);
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    background: var(--superficie);
+    box-shadow: var(--sombra);
+    position: relative;
+  }
+
+  .grilla-zoom-lienzo {
+    transform-origin: top left;
+    transition: zoom 0.12s ease;
+    min-width: 780px;
+  }
+
+  table.grilla {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+  }
+
+  table.grilla th {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: var(--superficie-2);
+    color: var(--texto);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 8px 6px;
+    border-bottom: 1px solid var(--borde-fuerte);
+    border-right: 1px solid var(--borde);
+    text-align: center;
+  }
+
+  table.grilla th:first-child {
+    width: 108px;
+    left: 0;
+    z-index: 6;
+  }
+
+  table.grilla td {
+    height: 40px;
+    padding: 2px;
+    vertical-align: top;
+    border-bottom: 1px solid var(--borde);
+    border-right: 1px solid var(--borde);
+  }
+
+  table.grilla td.hora {
+    position: sticky;
+    left: 0;
+    z-index: 4;
+    background: var(--superficie-2);
+    padding: 4px 8px;
+    vertical-align: middle;
+    border-right: 1px solid var(--borde-fuerte);
+  }
+
+  table.grilla td.hora b {
+    display: block;
+    font-size: 11px;
+    font-family: var(--mono);
+    color: var(--texto);
+  }
+
+  table.grilla td.hora span {
+    display: block;
+    font-size: 10px;
+    color: var(--texto-3);
+    font-variant-numeric: tabular-nums;
+  }
+
+  table.grilla td.finde {
+    background: color-mix(in srgb, var(--superficie-2) 55%, var(--superficie));
+  }
+
+  table.grilla td.ocupada {
+    background: color-mix(in srgb, var(--acento) 2%, var(--superficie));
+  }
+
+  table.grilla td.tope {
+    outline: 2px solid var(--alerta);
+    outline-offset: -2px;
+    background: var(--alerta-fondo);
+  }
+
+  .celda-bloques {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  button.bloque {
+    appearance: none;
+    width: 100%;
+    text-align: left;
+    border: none;
+    padding: 3px 5px;
+    border-radius: 5px;
+    border-left: 3px solid hsl(var(--h, 212) 55% 45%);
+    background: hsl(var(--h, 212) 62% 95%);
+    color: hsl(var(--h, 212) 65% 20%);
+    font-family: inherit;
+    font-size: 10.5px;
+    line-height: 1.3;
+    cursor: pointer;
+    overflow: hidden;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+  }
+
+  html[data-tema="oscuro"] button.bloque {
+    background: hsl(var(--h, 212) 45% 22%);
+    color: hsl(var(--h, 212) 85% 88%);
+  }
+
+  button.bloque:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.12);
+  }
+
+  button.bloque .linea-1 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  button.bloque b {
+    font-family: var(--mono);
+    font-weight: 700;
+  }
+
+  button.bloque span.s {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    opacity: 0.85;
+    flex-shrink: 0;
+  }
+
+  button.bloque .nom-curso {
+    display: block;
+    font-weight: 600;
+    font-size: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  button.bloque i {
+    display: block;
+    font-style: italic;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    opacity: 0.9;
+  }
+
+  /* Panel Lateral Deslizable y Modal de Gestión Docente */
+  .velo-panel {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    z-index: 50;
+    display: none;
+  }
+
+  .velo-panel.abierto { display: block; }
+
+  aside#panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(640px, 96vw);
+    background: var(--superficie);
+    border-left: 1px solid var(--borde-fuerte);
+    box-shadow: -8px 0 28px rgba(15, 23, 42, 0.22);
+    z-index: 55;
+    transform: translateX(100%);
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+  }
+
+  aside#panel.abierto {
+    transform: translateX(0);
+  }
+
+  .cabecera-panel {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--borde);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    background: var(--superficie-2);
+  }
+
+  .cabecera-panel h3 {
+    margin: 2px 0 0;
+    font-size: 16px;
+  }
+
+  .cuerpo-panel {
+    padding: 18px 20px 36px;
+    overflow-y: auto;
+    flex: 1;
+  }
+
+  .ficha-datos {
+    display: grid;
+    grid-template-columns: 145px 1fr;
+    gap: 7px 12px;
+    font-size: 12.5px;
+    margin-bottom: 16px;
+  }
+
+  .ficha-datos dt {
+    color: var(--texto-2);
+    font-weight: 600;
+  }
+
+  .ficha-datos dd {
+    margin: 0;
+    color: var(--texto);
+    word-break: break-word;
+  }
+
+  /* Tarjetas de Edición por Sección en el Panel / Ventana Emergente */
+  .tarjeta-gestion-seccion {
+    border: 1px solid var(--borde-fuerte);
+    border-radius: 12px;
+    background: var(--superficie);
+    padding: 14px 16px;
+    margin-bottom: 16px;
+    box-shadow: var(--sombra);
+  }
+
+  .tarjeta-gestion-seccion.confirmado-si {
+    border-left: 4px solid var(--ok);
+  }
+
+  .tarjeta-gestion-seccion.confirmado-no {
+    border-left: 4px solid var(--aviso);
+  }
+
+  .tarjeta-gestion-seccion.pendiente {
+    border-left: 4px solid var(--acento);
+  }
+
+  .cabecera-tarjeta-sec {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--borde);
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+
+  .grupo-decision-radio {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin: 8px 0 12px;
+  }
+
+  .opcion-radio-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 9px 12px;
+    border-radius: 8px;
+    border: 1.5px solid var(--borde-fuerte);
+    background: var(--superficie-2);
+    font-weight: 700;
+    font-size: 12.5px;
+    cursor: pointer;
+    transition: all 0.14s ease;
+    user-select: none;
+  }
+
+  .opcion-radio-card.disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .opcion-radio-card.activo-si {
+    border-color: var(--ok);
+    background: var(--ok-fondo);
+    color: var(--ok);
+  }
+
+  .opcion-radio-card.activo-no {
+    border-color: var(--alerta);
+    background: var(--alerta-fondo);
+    color: var(--alerta);
+  }
+
+  .caja-reemplazo {
+    background: var(--superficie-2);
+    border: 1px solid var(--borde-fuerte);
+    border-radius: 9px;
+    padding: 12px;
+    margin-top: 8px;
+  }
+
+  .campo-form {
+    margin-bottom: 10px;
+  }
+
+  .campo-form label {
+    display: block;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--texto-2);
+    margin-bottom: 4px;
+  }
+
+  .campo-form input[type="text"],
+  .campo-form select,
+  .campo-form textarea {
+    width: 100%;
+    padding: 7px 10px;
+    border-radius: 7px;
+    border: 1px solid var(--borde-fuerte);
+    background: var(--superficie);
+    color: var(--texto);
+    font-family: inherit;
+    font-size: 12.5px;
+  }
+
+  .campo-form input[type="text"]:focus,
+  .campo-form select:focus,
+  .campo-form textarea:focus {
+    outline: none;
+    border-color: var(--acento);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--acento) 18%, transparent);
+  }
+
+  .fila-dos-campos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .caja-solicitud-horario {
+    margin-top: 12px;
+    padding: 11px 12px;
+    border-radius: 9px;
+    border: 1px dashed var(--borde-fuerte);
+    background: color-mix(in srgb, var(--acento) 3%, var(--superficie));
+  }
+
+  .resumen-solicitud-ficha {
+    margin-top: 8px;
+    padding: 8px 10px;
+    border-radius: 7px;
+    background: #fef9c3;
+    border: 1px solid #fde047;
+    color: #713f12;
+    font-size: 12px;
+  }
+
+  html[data-tema="oscuro"] .resumen-solicitud-ficha {
+    background: rgba(234, 179, 8, 0.16);
+    border-color: rgba(250, 204, 21, 0.4);
+    color: #fef08a;
+  }
+
+  .celda-horario-cambiado {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 5px;
+    background: #fef08a;
+    color: #713f12;
+    border: 1px solid #facc15;
+    font-weight: 700;
+  }
+
+  .chips-justificacion-rapida {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 5px;
+  }
+
+  .chip-motivo {
+    appearance: none;
+    border: 1px solid var(--borde-fuerte);
+    background: var(--superficie);
+    color: var(--texto-2);
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 99px;
+    cursor: pointer;
+    transition: all 0.12s ease;
+  }
+
+  .chip-motivo:hover {
+    border-color: var(--acento);
+    color: var(--acento);
+  }
+
+  .constructor-bloques-mini {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    margin-top: 6px;
+  }
+
+  .constructor-bloques-mini select {
+    padding: 5px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--borde-fuerte);
+    background: var(--superficie);
+    color: var(--texto);
+    font-size: 12px;
+  }
+
+  /* Modal Central de Resumen / Guardar / Alertas */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    z-index: 70;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+
+  .modal-backdrop.abierto {
+    display: flex;
+  }
+
+  .modal-dialogo {
+    width: min(680px, 96vw);
+    max-height: 90vh;
+    background: var(--superficie);
+    border: 1px solid var(--borde-fuerte);
+    border-radius: 14px;
+    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.28);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .modal-cabecera {
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--borde);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--superficie-2);
+  }
+
+  .modal-cabecera h3 {
+    margin: 0;
+    font-size: 16px;
+  }
+
+  .modal-cuerpo {
+    padding: 18px 20px;
+    overflow-y: auto;
+  }
+
+  .modal-pie {
+    padding: 12px 20px;
+    border-top: 1px solid var(--borde);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    background: var(--superficie-2);
+    flex-wrap: wrap;
+  }
+
+  /* Mini-grilla en Panel Lateral */
+  table.mini-grilla {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    font-size: 10px;
+    margin: 10px 0 16px;
+    border: 1px solid var(--borde);
+  }
+
+  table.mini-grilla th, table.mini-grilla td {
+    height: 20px;
+    border: 1px solid var(--borde);
+    text-align: center;
+    padding: 0 2px;
+  }
+
+  table.mini-grilla th {
+    background: var(--superficie-2);
+    font-weight: 700;
+  }
+
+  table.mini-grilla td.activo {
+    background: hsl(var(--h, 212) 65% 50%);
+    color: #fff;
+    font-weight: 700;
+  }
+
+  table.mini-grilla td.conflicto {
+    background: var(--alerta);
+    color: #fff;
+    font-weight: 700;
+  }
+
+  .chips-enlaces {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  button.enlace-ficha {
+    appearance: none;
+    border: 1px solid var(--borde-fuerte);
+    background: var(--superficie-2);
+    color: var(--texto);
+    padding: 4px 9px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 11.5px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  button.enlace-ficha:hover {
+    border-color: var(--acento);
+    color: var(--acento);
+  }
+
+  /* Tarjetas de Alertas */
+  .lista-alertas {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .item-alerta {
+    padding: 10px 13px;
+    border-radius: 8px;
+    border: 1px solid var(--borde);
+    background: var(--superficie-2);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .item-alerta.critica {
+    border-left: 4px solid var(--alerta);
+    background: var(--alerta-fondo);
+  }
+
+  .item-alerta.advertencia {
+    border-left: 4px solid var(--aviso);
+    background: var(--aviso-fondo);
+  }
+
+  .item-alerta.exito {
+    border-left: 4px solid var(--ok);
+    background: var(--ok-fondo);
+  }
+
+  /* Toast flotante de confirmación */
+  .toast-aviso {
+    position: fixed;
+    bottom: 22px;
+    right: 22px;
+    z-index: 90;
+    background: var(--texto);
+    color: var(--superficie);
+    padding: 11px 16px;
+    border-radius: 10px;
+    font-size: 12.5px;
+    font-weight: 600;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+    transform: translateY(120%);
+    opacity: 0;
+    transition: all 0.22s ease;
+    max-width: min(440px, 90vw);
+  }
+
+  .toast-aviso.visible {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  /* Adaptabilidad Responsiva */
+  @media (max-width: 1100px) {
+    header.barra { padding: 10px 16px; }
+    nav.tabs {
+      order: 3;
+      width: 100%;
+      justify-content: flex-start;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+    }
+    main.contenedor { padding: 16px 14px 40px; }
+  }
+
+  @media (max-width: 768px) {
+    .rejilla-kpi {
+      grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+      gap: 10px;
+    }
+    .kpi .val { font-size: 22px; }
+    .dos-columnas { grid-template-columns: 1fr; }
+    .controles-filtro input[type="search"],
+    .controles-filtro select,
+    .controles-horario select {
+      width: 100%;
+      min-width: 0 !important;
+      flex: 1 1 100%;
+    }
+    .contador-resultados {
+      width: 100%;
+      margin-left: 0;
+      text-align: right;
+    }
+    .barra-fila {
+      grid-template-columns: 110px 1fr 78px;
+      font-size: 11.5px;
+    }
+    .ficha-datos { grid-template-columns: 1fr; gap: 3px; }
+    .fila-dos-campos { grid-template-columns: 1fr; }
+    .grupo-decision-radio { grid-template-columns: 1fr; }
+    .item-alerta { flex-direction: column; }
+    .zona-carga-inicial { margin: 20px auto; padding: 28px 18px; }
+    .grilla-envoltura { max-height: calc(100vh - 200px); }
+  }
+</style>
+</head>
+<body>
+
+<header class="barra">
+  <div class="marca">
+    <div class="logo" id="logo-sede">U</div>
+    <div class="titulos">
+      <h1 id="titulo-app">Confirmación Docente · Derecho UNAB</h1>
+      <p id="subtitulo-app">Sin archivo cargado · Carga la planilla Excel (.xlsx) de tu sede para iniciar</p>
+    </div>
+  </div>
+
+  <nav class="tabs" id="nav-tabs">
+    <button type="button" data-tab="resumen" class="activo" disabled>Resumen</button>
+    <button type="button" data-tab="secciones" disabled>
+      Secciones <span class="badge info" id="badge-secciones-pend">0</span>
+    </button>
+    <button type="button" data-tab="horario" disabled>Horario (M1–M20)</button>
+    <button type="button" data-tab="ayudantias" disabled>
+      Ayudantías (AYI) <span class="badge info" id="badge-ayi">0</span>
+    </button>
+  </nav>
+
+  <div class="acciones-barra">
+    <input type="file" id="input-xlsx" accept=".xlsx" multiple style="display:none">
+    <button type="button" class="btn-accion" id="btn-cargar-xlsx" title="Cargar planilla Excel (.xlsx)">
+      📂 Cargar Planilla (.xlsx)
+    </button>
+    <button type="button" class="btn-accion exito" id="btn-finalizar-revision" disabled title="Revisar estado de confirmación y descargar planilla oficial">
+      ✓ Guardar / Revisión Lista
+    </button>
+    <button type="button" class="btn-accion primario" id="btn-descargar-oficial" disabled title="Descargar planilla oficial (.xlsx) con confirmaciones, reemplazos y solicitudes">
+      ⬇ Descargar .xlsx
+    </button>
+    <button type="button" class="btn-accion" id="tema" title="Alternar tema claro / oscuro">◐</button>
+  </div>
+</header>
+
+<main class="contenedor">
+  <!-- Barra de selección cuando se cargan varios archivos Excel a la vez -->
+  <div class="barra-archivos" id="barra-archivos">
+    <div class="lista-archivos-tabs" id="lista-archivos-tabs"></div>
+    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+      <span style="font-size:12px; color:var(--texto-2);" id="meta-archivo-activo"></span>
+      <button type="button" class="btn-accion secundario" id="btn-reiniciar-sesion" style="font-size:11px; padding:4px 8px;" title="Borrar cambios guardados localmente para esta planilla">
+        ↺ Restablecer cambios locales
+      </button>
+    </div>
+  </div>
+
+  <!-- Estado Inicial: Sin datos precargados -->
+  <section id="vista-vacia" class="zona-carga-inicial">
+    <div class="icono-carga">⚖️</div>
+    <h2>Confirmación de Docentes y Solicitudes · Dirección de Carrera</h2>
+    <p>
+      Arrastra aquí la planilla de control de tu sede (<code>.xlsx</code>) o haz clic en el botón inferior.
+      Soporta los formatos de Concepción, Casona, Bellavista y Viña del Mar. Podrás confirmar (<b>SI</b>) o rechazar (<b>NO</b>) cada docente por sección, ingresar los datos obligatorios del nuevo docente y registrar solicitudes de cambio de horario con detección automática de incompatibilidades.
+    </p>
+    <button type="button" class="btn-accion primario" style="padding:10px 20px; font-size:13.5px;" id="btn-cargar-central">
+      Seleccionar planilla Excel (.xlsx)
+    </button>
+    <div id="mensaje-error-carga" style="margin-top:16px; display:none;" class="pildora alerta"></div>
+
+    <div class="chips-formatos">
+      <span class="chip-info">✓ Compatible con todas las sedes (Concepción, Casona, Bellavista, Viña)</span>
+      <span class="chip-info">✓ Confirmación SI / NO independiente por sección</span>
+      <span class="chip-info">✓ Registro obligatorio de Nuevo Docente, RUT y Perfil Listo</span>
+      <span class="chip-info">✓ Solicitudes de cambio horario con justificación</span>
+    </div>
+  </section>
+
+  <!-- PESTAÑA 1: RESUMEN -->
+  <section id="vista-resumen" class="vista">
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
+      <div style="font-size:12px; color:var(--texto-2); font-weight:600;">
+        Estado ejecutivo de confirmación docente, perfiles nuevos y solicitudes · Cátedra (TEO) y Ayudantías (AYI)
+      </div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button type="button" class="btn-accion exito" id="btn-resumen-guardar">
+          ✓ Guardar / Revisión Lista
+        </button>
+        <button type="button" class="btn-accion primario" id="btn-descargar-informe-resumen">
+          ⬇ Descargar Planilla Oficial (.xlsx)
+        </button>
+      </div>
+    </div>
+
+    <div class="rejilla-kpi" id="contenedor-kpis"></div>
+
+    <div class="dos-columnas">
+      <div class="panel">
+        <h2>Distribución por Área Académica <span class="sub-h2" id="sub-dist-area"></span></h2>
+        <div class="barras" id="barras-area"></div>
+      </div>
+      <div class="panel">
+        <h2>Estado de Gestión Dirección de Carrera <span class="sub-h2" id="sub-dist-jornada"></span></h2>
+        <div class="barras" id="barras-gestion"></div>
+        <div style="margin-top:18px; padding-top:14px; border-top:1px solid var(--borde);" id="resumen-auditoria-rapida"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Cobertura por Cohorte (Año, Semestre y Jornada) <span class="sub-h2" id="sub-cobertura"></span></h2>
+      <div class="envoltorio-tabla">
+        <table class="tabla-compacta" id="tabla-cobertura">
+          <thead>
+            <tr>
+              <th>Año Malla</th>
+              <th>Semestre</th>
+              <th>Jornada</th>
+              <th>Secciones TEO</th>
+              <th>Con Docente Efectivo</th>
+              <th>Sin Docente</th>
+              <th>Confirmadas (SI)</th>
+              <th>Reemplazos / Vacantes (NO)</th>
+              <th>Pendientes</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- PESTAÑA 2: SECCIONES -->
+  <section id="vista-secciones" class="vista">
+    <div class="controles-filtro">
+      <input type="search" id="filtro-sec-texto" placeholder="Buscar por código, asignatura, docente propuesto/nuevo, RUT o sección...">
+      <select id="filtro-sec-anio"><option value="">Todos los años</option></select>
+      <select id="filtro-sec-area"><option value="">Todas las áreas</option></select>
+      <select id="filtro-sec-jornada">
+        <option value="">Todas las jornadas</option>
+        <option value="Diurno">Diurno</option>
+        <option value="Vespertino">Vespertino</option>
+        <option value="Sin horario">Sin horario</option>
+      </select>
+      <select id="filtro-sec-estado">
+        <option value="">Todos los estados de confirmación</option>
+        <option value="pendiente">Pendientes de confirmar</option>
+        <option value="confirmado_si">Confirmados (SI)</option>
+        <option value="confirmado_no">No Confirmados / Nuevo Docente (NO)</option>
+        <option value="vacante">Sin Profesor Propuesto (Vacantes)</option>
+        <option value="con_solicitud">Con Solicitud de Cambio Horario</option>
+      </select>
+      <span class="contador-resultados" id="contador-secciones"></span>
+      <button type="button" class="btn-accion primario" id="btn-descargar-secciones-xlsx" title="Descargar planilla oficial (.xlsx)">
+        ⬇ Descargar .xlsx
+      </button>
+    </div>
+
+    <div class="envoltorio-tabla">
+      <table class="tabla" id="tabla-secciones">
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Asignatura</th>
+            <th>Sec.</th>
+            <th>Año / Sem.</th>
+            <th>Área</th>
+            <th>Horario (Original / Solicitado)</th>
+            <th>Profesor Propuesto</th>
+            <th>Confirma</th>
+            <th>Nuevo Docente / Perfil</th>
+            <th>Solicitudes y Justificación</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- PESTAÑA 3: HORARIO (M1-M20) -->
+  <section id="vista-horario" class="vista">
+    <div class="controles-horario">
+      <div class="grupo-controles-horario">
+        <div class="segmento" id="segmento-modo-horario">
+          <button type="button" data-modo="cohorte" class="activo">Por año y semestre</button>
+          <button type="button" data-modo="docente">Por docente</button>
+          <button type="button" data-modo="seccion">Por sección</button>
+        </div>
+
+        <select id="selector-horario-principal" style="min-width:270px;"></select>
+
+        <select id="selector-horario-jornada">
+          <option value="TODAS">Jornada: Todas (Diurno + Vespertino)</option>
+          <option value="Diurno">Sólo Diurno (M1–M11)</option>
+          <option value="Vespertino">Sólo Vespertino (M15–M20 / Sáb)</option>
+        </select>
+      </div>
+
+      <div class="barra-herramientas-horario">
+        <div style="font-size:12px; color:var(--texto-2); font-weight:600;" id="resumen-vista-horario"></div>
+
+        <div class="control-zoom" title="Acercar o alejar la grilla horaria para vista panorámica">
+          <span style="font-size:11px; color:var(--texto-2); padding:0 4px; font-weight:600;">🔍 Zoom:</span>
+          <button type="button" id="btn-zoom-out" title="Alejar (−)">−</button>
+          <span class="zoom-valor" id="etiqueta-zoom">100%</span>
+          <button type="button" id="btn-zoom-in" title="Acercar (+)">+</button>
+          <button type="button" id="btn-zoom-reset" title="Restablecer 100%" style="font-size:10.5px;">100%</button>
+          <button type="button" id="btn-zoom-panoramica" title="Vista panorámica compacta (65%)" style="font-size:10.5px;">Panorámica</button>
+        </div>
+
+        <button type="button" class="btn-accion primario" id="btn-descargar-xlsx" title="Descargar matriz horaria de esta vista en Excel (.xlsx)">
+          ⬇ Descargar Grilla (.xlsx)
+        </button>
+      </div>
+    </div>
+
+    <div class="grilla-envoltura" id="grilla-envoltura">
+      <div class="grilla-zoom-lienzo" id="grilla-zoom-lienzo">
+        <table class="grilla" id="grilla-horario">
+          <thead>
+            <tr>
+              <th>Módulo / Hora</th>
+              <th>Lunes</th>
+              <th>Martes</th>
+              <th>Miércoles</th>
+              <th>Jueves</th>
+              <th>Viernes</th>
+              <th>Sábado</th>
+            </tr>
+          </thead>
+          <tbody id="cuerpo-grilla-horario"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- PESTAÑA 4: AYUDANTÍAS (AYI) -->
+  <section id="vista-ayudantias" class="vista">
+    <div class="rejilla-kpi" id="contenedor-kpis-ayi"></div>
+
+    <div class="dos-columnas">
+      <div class="panel">
+        <h2>Cumplimiento de Ayudantías (AYI) por Área <span class="sub-h2" id="sub-ayi-area"></span></h2>
+        <div class="barras" id="barras-ayi-area"></div>
+      </div>
+      <div class="panel">
+        <h2>Observaciones en Ayudantías (Sin exigencia de horario) <span class="sub-h2" id="sub-ayi-alertas"></span></h2>
+        <div class="lista-alertas" id="lista-alertas-ayi" style="max-height:260px; overflow-y:auto;"></div>
+      </div>
+    </div>
+
+    <div class="controles-filtro">
+      <input type="search" id="filtro-ayi-texto" placeholder="Buscar ayudantía por código, asignatura, nombre de ayudante, RUT o sección...">
+      <select id="filtro-ayi-area"><option value="">Todas las áreas</option></select>
+      <select id="filtro-ayi-estado">
+        <option value="">Todos los estados de cumplimiento</option>
+        <option value="completo">Cumple (Nombre + RUT válidos)</option>
+        <option value="incompleto">Incompleto (Falta Nombre y/o RUT)</option>
+        <option value="falta_nombre">Sin Nombre de Ayudante</option>
+        <option value="falta_rut">Con Nombre pero Sin RUT</option>
+      </select>
+      <span class="contador-resultados" id="contador-ayi"></span>
+      <button type="button" class="btn-accion primario" id="btn-descargar-ayi-xlsx" title="Descargar en Excel (.xlsx) las ayudantías (AYI) filtradas">
+        ⬇ Descargar Ayudantías (.xlsx)
+      </button>
+    </div>
+
+    <div class="envoltorio-tabla">
+      <table class="tabla" id="tabla-ayi">
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Asignatura</th>
+            <th>Sec.</th>
+            <th>Año / Sem.</th>
+            <th>Área</th>
+            <th>Ayudante Propuesto</th>
+            <th>RUT</th>
+            <th>Confirma / Nuevo Ayudante</th>
+            <th>Cumplimiento (Nombre + RUT)</th>
+            <th>Filas Excel</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<!-- Panel Lateral Deslizable de Gestión Docente / Sección -->
+<div class="velo-panel" id="velo-panel"></div>
+<aside id="panel">
+  <div class="cabecera-panel">
+    <div>
+      <div id="panel-subtitulo" style="font-size:11.5px; color:var(--texto-2); font-weight:600;"></div>
+      <h3 id="panel-titulo">Gestión Docente</h3>
+    </div>
+    <button type="button" class="btn-accion" id="btn-cerrar-panel" title="Cerrar ventana">✕</button>
+  </div>
+  <div class="cuerpo-panel" id="panel-cuerpo"></div>
+</aside>
+
+<!-- Modal Central de Guardado / Revisión Lista y Descarga Oficial -->
+<div class="modal-backdrop" id="modal-resumen-guardar">
+  <div class="modal-dialogo">
+    <div class="modal-cabecera">
+      <h3 id="modal-guardar-titulo">✓ Resumen de Revisión y Exportación Oficial</h3>
+      <button type="button" class="btn-accion" id="btn-cerrar-modal-guardar">✕</button>
+    </div>
+    <div class="modal-cuerpo" id="modal-guardar-cuerpo"></div>
+    <div class="modal-pie">
+      <button type="button" class="btn-accion" id="btn-modal-seguir-editando">Seguir revisando</button>
+      <button type="button" class="btn-accion primario" id="btn-modal-descargar-xlsx">
+        ⬇ Descargar Planilla Oficial (.xlsx)
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast de confirmación -->
+<div class="toast-aviso" id="toast-aviso"></div>
+
+<script>
+(() => {
+  "use strict";
+
+  // ============================================================================
+  // 1. CATÁLOGO OFICIAL DE MALLA CURRICULAR UNAB Y BLOQUES HORARIOS (M1-M20)
+  // ============================================================================
+  const MALLA_OFICIAL = {
+    "DERE001": { anio: 1, semestre: 1, nombre: "Introducción al Derecho", horasTeo: 4, area: "CIENCIAS" },
+    "DERE002": { anio: 1, semestre: 1, nombre: "Historia del Derecho", horasTeo: 4, area: "CIENCIAS" },
+    "DERE003": { anio: 1, semestre: 1, nombre: "Instituciones Políticas y Derecho Constitucional Orgánico", horasTeo: 6, area: "PUBLICO" },
+    "DERE004": { anio: 1, semestre: 1, nombre: "Derecho Romano", horasTeo: 6, area: "PRIVADO" },
+    "CEGHC11": { anio: 1, semestre: 1, nombre: "Habilidades Comunicativas", horasTeo: 0, area: "FORMACION GENERAL" },
+    "DERE005": { anio: 1, semestre: 2, nombre: "Nociones de Economía", horasTeo: 4, area: "ECONOMICO" },
+    "DERE006": { anio: 1, semestre: 2, nombre: "Teoría de los Derechos y Acciones Constitucionales", horasTeo: 6, area: "PUBLICO" },
+    "DERE007": { anio: 1, semestre: 2, nombre: "Fundamentos de Derecho Privado", horasTeo: 4, area: "PRIVADO" },
+    "DERE008": { anio: 1, semestre: 2, nombre: "Interpretación y Argumentación", horasTeo: 4, area: "CIENCIAS" },
+    "ING119":  { anio: 1, semestre: 2, nombre: "Inglés I", horasTeo: 6, area: "INGLES" },
+    "DERE009": { anio: 2, semestre: 3, nombre: "Derechos Fundamentales", horasTeo: 6, area: "PUBLICO" },
+    "DERE010": { anio: 2, semestre: 3, nombre: "Negocio Jurídico y Teoría General de las Obligaciones", horasTeo: 6, area: "PRIVADO" },
+    "DERE011": { anio: 2, semestre: 3, nombre: "Derecho Procesal Parte General", horasTeo: 6, area: "PROCESAL" },
+    "CEGPC13": { anio: 2, semestre: 3, nombre: "Pensamiento Crítico", horasTeo: 0, area: "FORMACION GENERAL" },
+    "ING129":  { anio: 2, semestre: 3, nombre: "Inglés II", horasTeo: 6, area: "INGLES" },
+    "DERE012": { anio: 2, semestre: 4, nombre: "Fundamentos del Derecho Comercial y Teoría General de los Títulos de Crédito", horasTeo: 4, area: "ECONOMICO" },
+    "DERE013": { anio: 2, semestre: 4, nombre: "Derecho Internacional Público", horasTeo: 4, area: "PUBLICO" },
+    "DERE014": { anio: 2, semestre: 4, nombre: "Derecho de los Bienes", horasTeo: 6, area: "PRIVADO" },
+    "DERE015": { anio: 2, semestre: 4, nombre: "Normas Comunes a todo Procedimiento", horasTeo: 6, area: "PROCESAL" },
+    "ING239":  { anio: 2, semestre: 4, nombre: "Inglés III", horasTeo: 6, area: "INGLES" },
+    "DERE016": { anio: 3, semestre: 5, nombre: "Principios Fundamentales del Derecho Penal y de la Pena", horasTeo: 4, area: "PENAL" },
+    "DERE017": { anio: 3, semestre: 5, nombre: "Derecho Administrativo I", horasTeo: 4, area: "PUBLICO" },
+    "DERE018": { anio: 3, semestre: 5, nombre: "Cumplimiento e Incumplimiento de las Obligaciones Contractuales", horasTeo: 4, area: "PRIVADO" },
+    "DERE019": { anio: 3, semestre: 5, nombre: "Procedimientos Declarativos", horasTeo: 6, area: "PROCESAL" },
+    "DERE020": { anio: 3, semestre: 5, nombre: "Seminario de Integración", horasTeo: 4, area: "AIME" },
+    "ING249":  { anio: 3, semestre: 5, nombre: "Inglés IV", horasTeo: 6, area: "INGLES" },
+    "DERE021": { anio: 3, semestre: 6, nombre: "Derecho Societario", horasTeo: 6, area: "ECONOMICO" },
+    "DERE022": { anio: 3, semestre: 6, nombre: "Parte General del Derecho Penal", horasTeo: 4, area: "PENAL" },
+    "DERE023": { anio: 3, semestre: 6, nombre: "Derecho Administrativo II", horasTeo: 4, area: "PUBLICO" },
+    "DERE024": { anio: 3, semestre: 6, nombre: "Responsabilidad Extracontractual", horasTeo: 4, area: "PRIVADO" },
+    "DERE025": { anio: 3, semestre: 6, nombre: "Derecho Laboral", horasTeo: 4, area: "ECONOMICO" },
+    "DERE026": { anio: 3, semestre: 6, nombre: "Ejecución y Recursos", horasTeo: 6, area: "PROCESAL" },
+    "DERE027": { anio: 4, semestre: 7, nombre: "Derecho Tributario", horasTeo: 4, area: "ECONOMICO" },
+    "DERE028": { anio: 4, semestre: 7, nombre: "Parte Especial del Derecho Penal", horasTeo: 4, area: "PENAL" },
+    "DERE029": { anio: 4, semestre: 7, nombre: "Contratos", horasTeo: 4, area: "PRIVADO" },
+    "DERE030": { anio: 4, semestre: 7, nombre: "Destrezas de Asesoría Legal", horasTeo: 4, area: "CLINICA" },
+    "DERE031": { anio: 4, semestre: 7, nombre: "Derecho Procesal Penal", horasTeo: 6, area: "PROCESAL" },
+    "DERE032": { anio: 4, semestre: 7, nombre: "Derecho, Innovación y Tecnología", horasTeo: 4, area: "ECONOMICO" },
+    "DERE033": { anio: 4, semestre: 8, nombre: "Litigación Oral", horasTeo: 4, area: "PROCESAL" },
+    "DERE034": { anio: 4, semestre: 8, nombre: "Ética Profesional", horasTeo: 4, area: "CIENCIAS" },
+    "DERE035": { anio: 4, semestre: 8, nombre: "Derecho de Familia", horasTeo: 6, area: "PRIVADO" },
+    "DERE036": { anio: 4, semestre: 8, nombre: "Redacción Forense", horasTeo: 4, area: "CLINICA" },
+    "DERE037": { anio: 4, semestre: 8, nombre: "Negociación y Mediación", horasTeo: 4, area: "CLINICA" },
+    "DERE038": { anio: 4, semestre: 8, nombre: "Seminario de Doctrina y Jurisprudencia", horasTeo: 4, area: "CIENCIAS" },
+    "DERE039": { anio: 5, semestre: 9, nombre: "Electivo I", horasTeo: 4, area: "ELECTIVO" },
+    "DERE040": { anio: 5, semestre: 9, nombre: "Seminario de Investigación", horasTeo: 4, area: "CIENCIAS" },
+    "DERE041": { anio: 5, semestre: 9, nombre: "Derecho Sucesorio", horasTeo: 6, area: "PRIVADO" },
+    "DERE042": { anio: 5, semestre: 9, nombre: "Consultorio Jurídico I", horasTeo: 6, area: "CLINICA" },
+    "DERE043": { anio: 5, semestre: 9, nombre: "Derecho, Género e Inclusión", horasTeo: 4, area: "CIENCIAS" },
+    "DERE044": { anio: 5, semestre: 10, nombre: "Electivo II", horasTeo: 4, area: "ELECTIVO" },
+    "DERE045": { anio: 5, semestre: 10, nombre: "Electivo III", horasTeo: 4, area: "ELECTIVO" },
+    "DERE046": { anio: 5, semestre: 10, nombre: "Electivo IV", horasTeo: 4, area: "ELECTIVO" },
+    "DERE047": { anio: 5, semestre: 10, nombre: "Consultorio Jurídico II", horasTeo: 6, area: "CLINICA" },
+    "DERE048": { anio: 5, semestre: 10, nombre: "Actividad Final de Graduación", horasTeo: 7, area: "AIME" }
+  };
+
+  const BLOQUES_ESTANDAR = [
+    { mod: 1,  etq: "08:30–09:15" },
+    { mod: 2,  etq: "09:25–10:10" },
+    { mod: 3,  etq: "10:20–11:05" },
+    { mod: 4,  etq: "11:15–12:00" },
+    { mod: 5,  etq: "12:10–12:55" },
+    { mod: 6,  etq: "13:05–13:50" },
+    { mod: 7,  etq: "14:00–14:45" },
+    { mod: 8,  etq: "14:55–15:40" },
+    { mod: 9,  etq: "15:50–16:35" },
+    { mod: 10, etq: "16:45–17:30" },
+    { mod: 11, etq: "17:40–18:25" },
+    { mod: 12, etq: "18:35–19:20" },
+    { mod: 13, etq: "sin dato" },
+    { mod: 14, etq: "sin dato" },
+    { mod: 15, etq: "19:00–19:45" },
+    { mod: 16, etq: "19:46–20:30" },
+    { mod: 17, etq: "20:40–21:25" },
+    { mod: 18, etq: "21:26–22:10" },
+    { mod: 19, etq: "22:20–23:05" },
+    { mod: 20, etq: "23:06–23:50" }
+  ];
+
+  const DIAS_ORDEN = ["Lu", "Ma", "Mi", "Ju", "Vi", "Sa"];
+  const DIAS_NOMBRE = { Lu: "Lunes", Ma: "Martes", Mi: "Miércoles", Ju: "Jueves", Vi: "Viernes", Sa: "Sábado" };
+
+  const AREA_TONO = {
+    "CIENCIAS": 212,
+    "PUBLICO": 265,
+    "PRIVADO": 335,
+    "PROCESAL": 24,
+    "PENAL": 2,
+    "ECONOMICO": 150,
+    "CLINICA": 187,
+    "ELECTIVO": 45,
+    "AIME": 300,
+    "INGLES": 195,
+    "FORMACION GENERAL": 280
+  };
+
+  function obtenerTonoArea(areaRaw) {
+    const clave = limpiarClaveColumna(areaRaw || "SIN AREA");
+    if (AREA_TONO[clave] !== undefined) return AREA_TONO[clave];
+    let hash = 0;
+    for (let i = 0; i < clave.length; i++) {
+      hash = (hash * 31 + clave.charCodeAt(i)) % 360;
+    }
+    return hash;
+  }
+
+  // ============================================================================
+  // 2. LECTOR Y ESCRITOR NATIVO DE ARCHIVOS EXCEL (.XLSX) EN NAVEGADOR
+  // ============================================================================
+  async function descomprimirDeflateRaw(uint8Data) {
+    const ds = new DecompressionStream("deflate-raw");
+    const writer = ds.writable.getWriter();
+    writer.write(uint8Data);
+    writer.close();
+    const reader = ds.readable.getReader();
+    const chunks = [];
+    let totalLen = 0;
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      chunks.push(value);
+      totalLen += value.byteLength;
+    }
+    const out = new Uint8Array(totalLen);
+    let offset = 0;
+    for (const c of chunks) {
+      out.set(c, offset);
+      offset += c.byteLength;
+    }
+    return out;
+  }
+
+  async function extraerArchivosZip(arrayBuffer) {
+    const view = new DataView(arrayBuffer);
+    const bytes = new Uint8Array(arrayBuffer);
+    let eocdPos = -1;
+    for (let i = bytes.length - 22; i >= Math.max(0, bytes.length - 65557); i--) {
+      if (view.getUint32(i, true) === 0x06054b50) {
+        eocdPos = i;
+        break;
+      }
+    }
+    if (eocdPos < 0) throw new Error("El archivo no es un contenedor ZIP / XLSX válido.");
+
+    const cdCount = view.getUint16(eocdPos + 10, true);
+    const cdOffset = view.getUint32(eocdPos + 16, true);
+    let ptr = cdOffset;
+    const dec = new TextDecoder("utf-8");
+    const archivos = {};
+
+    for (let i = 0; i < cdCount; i++) {
+      if (view.getUint32(ptr, true) !== 0x02014b50) break;
+      const compMethod = view.getUint16(ptr + 10, true);
+      const compSize = view.getUint32(ptr + 20, true);
+      const nameLen = view.getUint16(ptr + 28, true);
+      const extraLen = view.getUint16(ptr + 30, true);
+      const commentLen = view.getUint16(ptr + 32, true);
+      const localHeaderOffset = view.getUint32(ptr + 42, true);
+      const fileName = dec.decode(bytes.subarray(ptr + 46, ptr + 46 + nameLen));
+
+      const localNameLen = view.getUint16(localHeaderOffset + 26, true);
+      const localExtraLen = view.getUint16(localHeaderOffset + 28, true);
+      const dataStart = localHeaderOffset + 30 + localNameLen + localExtraLen;
+      const compressedSlice = bytes.subarray(dataStart, dataStart + compSize);
+
+      if (fileName.endsWith(".xml") || fileName.endsWith(".rels")) {
+        let rawBytes = null;
+        if (compMethod === 0) {
+          rawBytes = compressedSlice;
+        } else if (compMethod === 8) {
+          rawBytes = await descomprimirDeflateRaw(compressedSlice);
+        }
+        if (rawBytes) {
+          archivos[fileName] = dec.decode(rawBytes);
+        }
+      }
+      ptr += 46 + nameLen + extraLen + commentLen;
+    }
+    return archivos;
+  }
+
+  function colLetraAIndice(colStr) {
+    let idx = 0;
+    for (let i = 0; i < colStr.length; i++) {
+      idx = idx * 26 + (colStr.charCodeAt(i) - 64);
+    }
+    return idx - 1;
+  }
+
+  function indiceAColLetra(idx) {
+    let n = idx + 1;
+    let s = "";
+    while (n > 0) {
+      const m = (n - 1) % 26;
+      s = String.fromCharCode(65 + m) + s;
+      n = Math.floor((n - m) / 26);
+    }
+    return s;
+  }
+
+  async function leerLibroXlsx(file) {
+    const buffer = await file.arrayBuffer();
+    const zip = await extraerArchivosZip(buffer);
+    const parser = new DOMParser();
+
+    const sharedStrings = [];
+    if (zip["xl/sharedStrings.xml"]) {
+      const ssDoc = parser.parseFromString(zip["xl/sharedStrings.xml"], "application/xml");
+      const siNodes = ssDoc.getElementsByTagName("si");
+      for (let i = 0; i < siNodes.length; i++) {
+        const tNodes = siNodes[i].getElementsByTagName("t");
+        let texto = "";
+        for (let j = 0; j < tNodes.length; j++) {
+          texto += tNodes[j].textContent || "";
+        }
+        sharedStrings.push(texto);
+      }
+    }
+
+    const hojas = [];
+    const clavesHojas = Object.keys(zip)
+      .filter(k => /^xl\/worksheets\/sheet\d+\.xml$/i.test(k))
+      .sort((a, b) => {
+        const na = parseInt(a.match(/(\d+)/)[1], 10);
+        const nb = parseInt(b.match(/(\d+)/)[1], 10);
+        return na - nb;
+      });
+
+    const mapaNombresHoja = {};
+    if (zip["xl/workbook.xml"] && zip["xl/_rels/workbook.xml.rels"]) {
+      try {
+        const wbDoc = parser.parseFromString(zip["xl/workbook.xml"], "application/xml");
+        const relsDoc = parser.parseFromString(zip["xl/_rels/workbook.xml.rels"], "application/xml");
+        const relMap = {};
+        const relNodes = relsDoc.getElementsByTagName("Relationship");
+        for (let i = 0; i < relNodes.length; i++) {
+          const id = relNodes[i].getAttribute("Id");
+          const target = relNodes[i].getAttribute("Target") || "";
+          relMap[id] = target.startsWith("xl/") ? target : `xl/${target.replace(/^\/+/, "")}`;
+        }
+        const sheetNodes = wbDoc.getElementsByTagName("sheet");
+        for (let i = 0; i < sheetNodes.length; i++) {
+          const name = sheetNodes[i].getAttribute("name") || "";
+          const rId = sheetNodes[i].getAttribute("r:id") || sheetNodes[i].getAttributeNS("http://schemas.openxmlformats.org/officeDocument/2006/relationships", "id");
+          if (rId && relMap[rId]) {
+            mapaNombresHoja[relMap[rId].toLowerCase()] = name;
+          }
+        }
+      } catch (_) {
+        // Ignorar si los metadatos de pestaña no son estándar
+      }
+    }
+
+    for (const rutaHoja of clavesHojas) {
+      const xmlDoc = parser.parseFromString(zip[rutaHoja], "application/xml");
+      const rowNodes = xmlDoc.getElementsByTagName("row");
+      const filasMatriz = [];
+
+      for (let r = 0; r < rowNodes.length; r++) {
+        const rowEl = rowNodes[r];
+        const numFilaExcel = parseInt(rowEl.getAttribute("r") || String(r + 1), 10);
+        const cNodes = rowEl.getElementsByTagName("c");
+        const filaArr = [];
+        let tieneContenido = false;
+        let colSecuencial = 0;
+
+        for (let c = 0; c < cNodes.length; c++) {
+          const cell = cNodes[c];
+          const ref = cell.getAttribute("r") || "";
+          const matchCol = ref.match(/^[A-Z]+/i);
+          const colIdx = matchCol ? colLetraAIndice(matchCol[0].toUpperCase()) : colSecuencial;
+          colSecuencial = colIdx + 1;
+
+          const tipo = cell.getAttribute("t") || "";
+          const vNode = cell.getElementsByTagName("v")[0];
+          const isNode = cell.getElementsByTagName("is")[0];
+          let valor = "";
+
+          if (tipo === "s" && vNode) {
+            const idx = parseInt(vNode.textContent || "0", 10);
+            valor = sharedStrings[idx] !== undefined ? sharedStrings[idx] : "";
+          } else if (tipo === "inlineStr" && isNode) {
+            const tNodes = isNode.getElementsByTagName("t");
+            if (tNodes.length > 0) {
+              for (let j = 0; j < tNodes.length; j++) valor += tNodes[j].textContent || "";
+            } else {
+              valor = isNode.textContent || "";
+            }
+          } else if (tipo === "e") {
+            valor = vNode ? vNode.textContent : "#REF!";
+          } else if (vNode) {
+            valor = vNode.textContent || "";
+          }
+
+          valor = String(valor).trim();
+          if (valor !== "") tieneContenido = true;
+          filaArr[colIdx] = valor;
+        }
+
+        if (tieneContenido) {
+          filasMatriz.push({ numFilaExcel, celdas: filaArr });
+        }
+      }
+      if (filasMatriz.length > 0) {
+        const nombreHoja = mapaNombresHoja[rutaHoja.toLowerCase()] || rutaHoja;
+        hojas.push({ rutaHoja, nombreHoja, filasMatriz });
+      }
+    }
+
+    if (hojas.length === 0) {
+      throw new Error("El archivo Excel no contiene hojas con datos legibles.");
+    }
+    return hojas;
+  }
+
+  // Generador nativo de .xlsx (usado directamente o como respaldo sin dependencias externas)
+  const CRC32_TABLE = (() => {
+    const t = new Uint32Array(256);
+    for (let i = 0; i < 256; i++) {
+      let c = i;
+      for (let k = 0; k < 8; k++) {
+        c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+      }
+      t[i] = c >>> 0;
+    }
+    return t;
+  })();
+
+  function calcularCrc32(bytes) {
+    let crc = 0xFFFFFFFF;
+    for (let i = 0; i < bytes.length; i++) {
+      crc = CRC32_TABLE[(crc ^ bytes[i]) & 0xFF] ^ (crc >>> 8);
+    }
+    return (crc ^ 0xFFFFFFFF) >>> 0;
+  }
+
+  function escaparXml(str) {
+    return String(str ?? "")
+      .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, "")
+      .replace(/\r\n/g, "\n")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&apos;");
+  }
+
+  function generarBlobXlsxNativo(hojasSpec) {
+    const enc = new TextEncoder();
+    const archivosMapa = {};
+
+    const overridesSheets = hojasSpec.map((_, idx) =>
+      `<Override PartName="/xl/worksheets/sheet${idx + 1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`
+    ).join("");
+
+    archivosMapa["[Content_Types].xml"] = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
+  <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
+  <Default Extension="xml" ContentType="application/xml"/>
+  <Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>
+  <Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>
+  ${overridesSheets}
+</Types>`;
+
+    archivosMapa["_rels/.rels"] = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>
+</Relationships>`;
+
+    const sheetsWbXml = hojasSpec.map((h, idx) =>
+      `<sheet name="${escaparXml(h.nombre.slice(0, 31))}" sheetId="${idx + 1}" r:id="rId${idx + 1}"/>`
+    ).join("");
+
+    archivosMapa["xl/workbook.xml"] = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
+  <sheets>${sheetsWbXml}</sheets>
+</workbook>`;
+
+    const relsWbXml = hojasSpec.map((_, idx) =>
+      `<Relationship Id="rId${idx + 1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${idx + 1}.xml"/>`
+    ).join("");
+
+    archivosMapa["xl/_rels/workbook.xml.rels"] = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  ${relsWbXml}
+  <Relationship Id="rId${hojasSpec.length + 1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>
+</Relationships>`;
+
+    archivosMapa["xl/styles.xml"] = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+  <fonts count="2">
+    <font><sz val="10"/><name val="Calibri"/></font>
+    <font><b/><sz val="10"/><color rgb="FFFFFFFF"/><name val="Calibri"/></font>
+  </fonts>
+  <fills count="4">
+    <fill><patternFill patternType="none"/></fill>
+    <fill><patternFill patternType="gray125"/></fill>
+    <fill><patternFill patternType="solid"><fgColor rgb="FF1E3A8A"/></patternFill></fill>
+    <fill><patternFill patternType="solid"><fgColor rgb="FFFEF08A"/></patternFill></fill>
+  </fills>
+  <borders count="2">
+    <border><left/><right/><top/><bottom/><diagonal/></border>
+    <border>
+      <left style="thin"><color rgb="FFCBD5E1"/></left>
+      <right style="thin"><color rgb="FFCBD5E1"/></right>
+      <top style="thin"><color rgb="FFCBD5E1"/></top>
+      <bottom style="thin"><color rgb="FFCBD5E1"/></bottom>
+    </border>
+  </borders>
+  <cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>
+  <cellXfs count="3">
+    <xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1"><alignment wrapText="1" vertical="center"/></xf>
+    <xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment wrapText="1" vertical="center" horizontal="center"/></xf>
+    <xf numFmtId="0" fontId="0" fillId="3" borderId="1" xfId="0" applyFill="1" applyBorder="1" applyAlignment="1"><alignment wrapText="1" vertical="center"/></xf>
+  </cellXfs>
+</styleSheet>`;
+
+    hojasSpec.forEach((h, sIdx) => {
+      const colsXml = h.anchos && h.anchos.length > 0
+        ? `<cols>${h.anchos.map((w, idx) => `<col min="${idx + 1}" max="${idx + 1}" width="${w}" customWidth="1"/>`).join("")}</cols>`
+        : "";
+      let maxCol = 1;
+      const rowsXml = h.filas.map((fila, rIdx) => {
+        const rNum = rIdx + 1;
+        if (fila.length > maxCol) maxCol = fila.length;
+        const defaultStyleIdx = (h.filaEncabezado === rIdx) ? 1 : 0;
+        const celdasXml = fila.map((celdaRaw, cIdx) => {
+          const ref = `${indiceAColLetra(cIdx)}${rNum}`;
+          const esObjetoCelda = typeof celdaRaw === "object" && celdaRaw !== null && "v" in celdaRaw;
+          const val = esObjetoCelda ? celdaRaw.v : celdaRaw;
+          const styleIdx = esObjetoCelda && celdaRaw.s !== undefined ? celdaRaw.s : defaultStyleIdx;
+
+          if (typeof val === "number" && !isNaN(val)) {
+            return `<c r="${ref}" s="${styleIdx}"><v>${val}</v></c>`;
+          }
+          return `<c r="${ref}" s="${styleIdx}" t="inlineStr"><is><t xml:space="preserve">${escaparXml(val ?? "")}</t></is></c>`;
+        }).join("");
+        return `<row r="${rNum}">${celdasXml}</row>`;
+      }).join("");
+      const maxRef = `${indiceAColLetra(Math.max(0, maxCol - 1))}${Math.max(1, h.filas.length)}`;
+      archivosMapa[`xl/worksheets/sheet${sIdx + 1}.xml`] = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+  <dimension ref="A1:${maxRef}"/>
+  <sheetViews><sheetView workbookViewId="0"/></sheetViews>
+  ${colsXml}
+  <sheetData>${rowsXml}</sheetData>
+</worksheet>`;
+    });
+
+    const entradas = [];
+    let offsetActual = 0;
+    const dosTime = 0x6000;
+    const dosDate = 0x5B71;
+
+    for (const [nombre, contenidoStr] of Object.entries(archivosMapa)) {
+      const nameBytes = enc.encode(nombre);
+      const dataBytes = enc.encode(contenidoStr);
+      const crc = calcularCrc32(dataBytes);
+      const size = dataBytes.length;
+
+      const localHeader = new Uint8Array(30 + nameBytes.length);
+      const lv = new DataView(localHeader.buffer);
+      lv.setUint32(0, 0x04034b50, true);
+      lv.setUint16(4, 20, true);
+      lv.setUint16(6, 0, true);
+      lv.setUint16(8, 0, true);
+      lv.setUint16(10, dosTime, true);
+      lv.setUint16(12, dosDate, true);
+      lv.setUint32(14, crc, true);
+      lv.setUint32(18, size, true);
+      lv.setUint32(22, size, true);
+      lv.setUint16(26, nameBytes.length, true);
+      lv.setUint16(28, 0, true);
+      localHeader.set(nameBytes, 30);
+
+      entradas.push({ nameBytes, dataBytes, crc, size, localHeader, offset: offsetActual });
+      offsetActual += localHeader.length + size;
+    }
+
+    const centralChunks = [];
+    let centralSize = 0;
+    for (const e of entradas) {
+      const cd = new Uint8Array(46 + e.nameBytes.length);
+      const cv = new DataView(cd.buffer);
+      cv.setUint32(0, 0x02014b50, true);
+      cv.setUint16(4, 20, true);
+      cv.setUint16(6, 20, true);
+      cv.setUint16(8, 0, true);
+      cv.setUint16(10, 0, true);
+      cv.setUint16(12, dosTime, true);
+      cv.setUint16(14, dosDate, true);
+      cv.setUint32(16, e.crc, true);
+      cv.setUint32(20, e.size, true);
+      cv.setUint32(24, e.size, true);
+      cv.setUint16(28, e.nameBytes.length, true);
+      cv.setUint16(30, 0, true);
+      cv.setUint16(32, 0, true);
+      cv.setUint16(34, 0, true);
+      cv.setUint16(36, 0, true);
+      cv.setUint32(38, 0, true);
+      cv.setUint32(42, e.offset, true);
+      cd.set(e.nameBytes, 46);
+      centralChunks.push(cd);
+      centralSize += cd.length;
+    }
+
+    const eocd = new Uint8Array(22);
+    const ev = new DataView(eocd.buffer);
+    ev.setUint32(0, 0x06054b50, true);
+    ev.setUint16(4, 0, true);
+    ev.setUint16(6, 0, true);
+    ev.setUint16(8, entradas.length, true);
+    ev.setUint16(10, entradas.length, true);
+    ev.setUint32(12, centralSize, true);
+    ev.setUint32(16, offsetActual, true);
+    ev.setUint16(20, 0, true);
+
+    const totalBytes = offsetActual + centralSize + eocd.length;
+    const salida = new Uint8Array(totalBytes);
+    let ptr = 0;
+    for (const e of entradas) {
+      salida.set(e.localHeader, ptr);
+      ptr += e.localHeader.length;
+      salida.set(e.dataBytes, ptr);
+      ptr += e.dataBytes.length;
+    }
+    for (const cd of centralChunks) {
+      salida.set(cd, ptr);
+      ptr += cd.length;
+    }
+    salida.set(eocd, ptr);
+    return new Blob([salida], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+  }
+
+  function descargarBlobArchivo(blob, nombreArchivo) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = nombreArchivo;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 250);
+  }
+
+  // ============================================================================
+  // 3. NORMALIZACIÓN DE DATOS, RUT CHILENO Y HORARIOS M1-M20 (MULTI-FORMATO)
+  // ============================================================================
+  function limpiarClaveColumna(txt) {
+    return String(txt || "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[._\-/()]+/g, " ")
+      .replace(/\s+/g, " ")
+      .trim()
+      .toUpperCase();
+  }
+
+  const ALIAS_COLUMNAS = {
+    sede: ["SEDE", "CAMPUS", "LOCAL", "SEDE CAMPUS"],
+    area: ["AREA", "AREA ACADEMICA", "DEPARTAMENTO", "DEPTO", "LINEA", "LINEA ACADEMICA"],
+    tipo: ["TIPO", "TIPO ACTIVIDAD", "COMPONENTE", "TIPO HORARIO", "MODALIDAD", "SUBTIPO", "ACTIVIDAD"],
+    codigo: ["CODIGO", "CURSO", "MATERIA", "SIGLA", "COD ASIGNATURA", "CODIGO ASIGNATURA", "CODIGO CURSO", "ASIGNATURA COD"],
+    asignatura: ["ASIGNATURA", "NOMBRE CURSO", "NOMBRE ASIGNATURA", "TITULO", "DESCRIPCION", "NOMBRE MATERIA"],
+    seccion: ["SECCION", "SEC", "N SECCION", "NRO SECCION", "NUMERO SECCION", "SECC"],
+    nrc: ["NRC"],
+    jornada: ["JORNADA", "REGIMEN"],
+    horario: ["HORARIO", "HORARIOS", "BLOQUES HORARIOS", "HORARIO ASIGNATURA"],
+    // Variantes de horario desagregado (Viña del Mar / Banner / Pregrado)
+    dia: ["DIA", "DIA SEMANA"],
+    modulo: ["MODULO", "BLOQUE", "BLOQUES", "FRANJA", "MODULOS"],
+    horaInicio: ["HORA INICIO", "INICIO", "HR INICIO", "DESDE", "HORA INI"],
+    horaFin: ["HORA FIN", "FIN", "TERMINO", "HR FIN", "HASTA"],
+    colLu: ["LUNES", "LU", "LUN"],
+    colMa: ["MARTES", "MA", "MAR"],
+    colMi: ["MIERCOLES", "MI", "MIE"],
+    colJu: ["JUEVES", "JU", "JUE"],
+    colVi: ["VIERNES", "VI", "VIE"],
+    colSa: ["SABADO", "SA", "SAB"],
+    // Variantes de docente propuesto (completo o separado en nombres/apellidos)
+    profPropuesto: [
+      "PROFESOR PROPUESTO", "DOCENTE PROPUESTO", "PROFESOR", "DOCENTE",
+      "ACADEMICO", "NOMBRE DOCENTE", "NOMBRE PROFESOR", "PROFESOR TITULAR", "DOCENTE TITULAR"
+    ],
+    apellidoPaterno: ["APELLIDO PATERNO", "PATERNO", "APELLIDO 1", "PRIMER APELLIDO"],
+    apellidoMaterno: ["APELLIDO MATERNO", "MATERNO", "APELLIDO 2", "SEGUNDO APELLIDO"],
+    nombresDocente: ["NOMBRES", "NOMBRE", "NOMBRES DOCENTE", "NOMBRES PROFESOR"],
+    rutPropuesto: ["RUT DOCENTE", "RUT ACADEMICO PROPUESTO", "RUT", "RUT PROFESOR", "RUN", "CEDULA", "ID DOCENTE"],
+    dvPropuesto: ["DV", "DIGITO VERIFICADOR", "DV DOCENTE"],
+    grado: ["GRADO ACADEMICO", "MAXIMO GRADO", "GRADO", "NIVEL ACADEMICO", "TITULO GRADO"],
+    confirma: ["CONFIRMA DOCENTE", "CONFIRMACION", "CONFIRMA", "ESTADO CONFIRMACION"],
+    nuevoDocente: ["NOMBRE NVO DOCENTE", "NOMBRE NUEVO DOCENTE", "NUEVO DOCENTE", "NVO DOCENTE", "DOCENTE REEMPLAZO"],
+    nuevoRut: ["RUT NVO DOCENTE", "RUT NUEVO DOCENTE", "NUEVO RUT", "RUT REEMPLAZO"],
+    perfil: ["PERFIL LISTO", "PERFIL CREADO EN SISTEMA S N", "PERFIL CREADO EN SISTEMA", "PERFIL CREADO", "PERFIL"],
+    goa: ["N INGRESO GOA", "NRO INGRESO GOA", "NUMERO INGRESO GOA", "INGRESO GOA", "GOA", "N GOA"],
+    comentarios: ["COMENTARIOS GOA", "COMENTARIOS", "OBSERVACIONES", "OBS", "NOTAS"],
+    solicitudes: ["SOLICITUDES", "SOLICITUD", "SOLICITUDES HORARIO"],
+    justificacion: ["JUSTIFICACION SOLICITUD", "JUSTIFICACION", "MOTIVO SOLICITUD", "JUSTIFICACION CAMBIO HORARIO"],
+    semestre: ["SEMESTRE", "NIVEL"]
+  };
+
+  function detectarFilaEncabezadoYMapeo(hojas) {
+    let mejorHoja = null;
+    let mejorFilaIdx = -1;
+    let mejorMapa = null;
+    let mejorPuntaje = -1;
+
+    const hojasAuxiliares = ["LISTA", "VALIDACION", "CATALOGO", "PARAMETRO", "TABLA", "INSTRUCCION"];
+
+    for (const hoja of hojas) {
+      const nomHojaNorm = limpiarClaveColumna(hoja.nombreHoja || "");
+      const penalizacionHoja = hojasAuxiliares.some(aux => nomHojaNorm.includes(aux)) ? -15 : 0;
+
+      const limiteBusqueda = Math.min(35, hoja.filasMatriz.length);
+      for (let i = 0; i < limiteBusqueda; i++) {
+        const celdas = hoja.filasMatriz[i].celdas;
+        const mapa = {};
+        let puntaje = penalizacionHoja;
+
+        for (let c = 0; c < celdas.length; c++) {
+          const limpio = limpiarClaveColumna(celdas[c]);
+          if (!limpio) continue;
+          for (const [campo, listaAlias] of Object.entries(ALIAS_COLUMNAS)) {
+            if (mapa[campo] === undefined && listaAlias.includes(limpio)) {
+              mapa[campo] = c;
+              if (["codigo", "seccion", "horario", "asignatura", "profPropuesto", "dia", "modulo"].includes(campo)) {
+                puntaje += 3;
+              } else {
+                puntaje += 1;
+              }
+            }
+          }
+        }
+
+        const filasDebajo = hoja.filasMatriz.length - i - 1;
+        if (filasDebajo > 10) puntaje += 2;
+
+        if (puntaje > mejorPuntaje && mapa.codigo !== undefined && mapa.seccion !== undefined) {
+          mejorPuntaje = puntaje;
+          mejorHoja = hoja;
+          mejorFilaIdx = i;
+          mejorMapa = mapa;
+        }
+      }
+    }
+
+    if (!mejorHoja || !mejorMapa) {
+      throw new Error("Formato incompatible: No se encontraron las columnas mínimas obligatorias (CÓDIGO/CURSO y SECCIÓN) en el archivo.");
+    }
+
+    return { hoja: mejorHoja, idxEncabezado: mejorFilaIdx, mapa: mejorMapa };
+  }
+
+  function inferirSedeDesdeArchivo(nombreArchivo) {
+    const n = limpiarClaveColumna(nombreArchivo);
+    if (n.includes("VINA")) return "VIÑA DEL MAR";
+    if (n.includes("CONCE")) return "CONCEPCIÓN";
+    if (n.includes("CASONA")) return "CASONA";
+    if (n.includes("BEL")) return "BELLAVISTA";
+    if (n.includes("SANTIAGO")) return "SANTIAGO";
+    return nombreArchivo.replace(/\.xlsx$/i, "").toUpperCase();
+  }
+
+  function normalizarRut(rutRaw) {
+    if (!rutRaw) return { clave: "", formateado: "", dvValido: false };
+    const texto = String(rutRaw).trim().toUpperCase();
+    if (texto.includes("SIN ") || texto === "S/R" || texto === "0" || texto === "-" || texto === "PENDIENTE" || texto === "POR DEFINIR") {
+      return { clave: "", formateado: "", dvValido: false };
+    }
+    const limpio = texto.replace(/[^0-9K]/g, "");
+    if (limpio.length < 2) return { clave: "", formateado: "", dvValido: false };
+    const cuerpo = limpio.slice(0, -1).replace(/^0+/, "") || "0";
+    const dv = limpio.slice(-1);
+    const clave = `${cuerpo}${dv}`;
+    const cuerpoPuntos = cuerpo.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+    // Cálculo dígito verificador Módulo 11 chileno
+    let suma = 0;
+    let mul = 2;
+    for (let i = cuerpo.length - 1; i >= 0; i--) {
+      suma += parseInt(cuerpo[i], 10) * mul;
+      mul = mul === 7 ? 2 : mul + 1;
+    }
+    const resto = 11 - (suma % 11);
+    const dvEsperado = resto === 11 ? "0" : (resto === 10 ? "K" : String(resto));
+
+    return {
+      clave,
+      formateado: `${cuerpoPuntos}-${dv}`,
+      dvValido: dv === dvEsperado
+    };
+  }
+
+  function normalizarSiNo(valRaw) {
+    const v = limpiarClaveColumna(valRaw);
+    if (v === "SI" || v === "S") return "SI";
+    if (v === "NO" || v === "N") return "NO";
+    return "";
+  }
+
+  function parsearMinutosHoraReloj(valorRaw) {
+    if (valorRaw === undefined || valorRaw === null || valorRaw === "") return null;
+    const str = String(valorRaw).trim();
+
+    const mHora = str.match(/^(\d{1,2}):(\d{2})(?::\d{2})?$/);
+    if (mHora) {
+      const hh = parseInt(mHora[1], 10);
+      const mm = parseInt(mHora[2], 10);
+      if (hh >= 0 && hh <= 23 && mm >= 0 && mm <= 59) {
+        return hh * 60 + mm;
+      }
+    }
+
+    const num = Number(str.replace(",", "."));
+    if (!isNaN(num) && num > 0 && num < 1) {
+      return Math.round(num * 24 * 60);
+    }
+
+    return null;
+  }
+
+  function rangoMinutosAModulos(minIni, minFin) {
+    const rangosModulos = [
+      { mod: 1,  ini: 8 * 60 + 30,  fin: 9 * 60 + 15 },
+      { mod: 2,  ini: 9 * 60 + 25,  fin: 10 * 60 + 10 },
+      { mod: 3,  ini: 10 * 60 + 20, fin: 11 * 60 + 5 },
+      { mod: 4,  ini: 11 * 60 + 15, fin: 12 * 60 + 0 },
+      { mod: 5,  ini: 12 * 60 + 10, fin: 12 * 60 + 55 },
+      { mod: 6,  ini: 13 * 60 + 5,  fin: 13 * 60 + 50 },
+      { mod: 7,  ini: 14 * 60 + 0,  fin: 14 * 60 + 45 },
+      { mod: 8,  ini: 14 * 60 + 55, fin: 15 * 60 + 40 },
+      { mod: 9,  ini: 15 * 60 + 50, fin: 16 * 60 + 35 },
+      { mod: 10, ini: 16 * 60 + 45, fin: 17 * 60 + 30 },
+      { mod: 11, ini: 17 * 60 + 40, fin: 18 * 60 + 25 },
+      { mod: 12, ini: 18 * 60 + 35, fin: 19 * 60 + 20 },
+      { mod: 15, ini: 19 * 60 + 0,  fin: 19 * 60 + 45 },
+      { mod: 16, ini: 19 * 60 + 46, fin: 20 * 60 + 30 },
+      { mod: 17, ini: 20 * 60 + 40, fin: 21 * 60 + 25 },
+      { mod: 18, ini: 21 * 60 + 26, fin: 22 * 60 + 10 },
+      { mod: 19, ini: 22 * 60 + 20, fin: 23 * 60 + 5 },
+      { mod: 20, ini: 23 * 60 + 6,  fin: 23 * 60 + 50 }
+    ];
+
+    const mods = [];
+    const finEfectivo = minFin && minFin > minIni ? minFin : minIni + 45;
+    for (const r of rangosModulos) {
+      if (r.ini >= minIni - 10 && r.fin <= finEfectivo + 10) {
+        mods.push(r.mod);
+      }
+    }
+    return mods;
+  }
+
+  function normalizarDiaTexto(diaRaw) {
+    const limpio = limpiarClaveColumna(diaRaw);
+    const mapa = {
+      "LU": "Lu", "LUN": "Lu", "LUNES": "Lu", "L": "Lu",
+      "MA": "Ma", "MAR": "Ma", "MARTES": "Ma", "M": "Ma",
+      "MI": "Mi", "MIE": "Mi", "MIERCOLES": "Mi", "X": "Mi", "W": "Mi",
+      "JU": "Ju", "JUE": "Ju", "JUEVES": "Ju", "J": "Ju",
+      "VI": "Vi", "VIE": "Vi", "VIERNES": "Vi", "V": "Vi",
+      "SA": "Sa", "SAB": "Sa", "SABADO": "Sa", "S": "Sa"
+    };
+    return mapa[limpio] || null;
+  }
+
+  function parsearHorario(cadenaHorario) {
+    const slots = [];
+    const errores = [];
+    if (!cadenaHorario) return { slots, errores };
+
+    const texto = String(cadenaHorario).trim();
+    if (!texto || ["SIN HORARIO", "-", "POR DEFINIR", "S/H"].includes(texto.toUpperCase())) {
+      return { slots, errores };
+    }
+
+    // 1. Formato horas reloj con día: ej "Lu 08:30 - 10:10" o "Lunes 19:00 a 20:30"
+    const regexHoraReloj = /\.?\b(Lu|Ma|Mi|Ju|Vi|Sa|Lun|Mar|Mie|Mié|Jue|Vie|Sab|Sáb|Lunes|Martes|Miercoles|Miércoles|Jueves|Viernes|Sabado|Sábado)\b\s*(\d{1,2}:\d{2})\s*[-–aA]\s*(\d{1,2}:\d{2})/gi;
+    let mReloj;
+    let encontroReloj = false;
+    while ((mReloj = regexHoraReloj.exec(texto)) !== null) {
+      const dia = normalizarDiaTexto(mReloj[1]);
+      const minI = parsearMinutosHoraReloj(mReloj[2]);
+      const minF = parsearMinutosHoraReloj(mReloj[3]);
+      if (dia && minI !== null && minF !== null) {
+        const mods = rangoMinutosAModulos(minI, minF);
+        if (mods.length > 0) {
+          encontroReloj = true;
+          for (const mod of mods) slots.push({ dia, modulo: mod });
+        }
+      }
+    }
+    if (encontroReloj) return { slots, errores };
+
+    // 2. Formato estándar UNAB: ".Lu 10-11, .Vi 10-11" o "Lu M10-M11"
+    const regex = /\.?\b(Lu|Ma|Mi|Ju|Vi|Sa|Lun|Mar|Mie|Mié|Jue|Vie|Sab|Sáb|Lunes|Martes|Miercoles|Miércoles|Jueves|Viernes|Sabado|Sábado)\b\s*M?(\d{1,2})(?:\s*[-–aA]\s*M?(\d{1,2}))?/gi;
+    let match;
+    let encontroAlguno = false;
+
+    while ((match = regex.exec(texto)) !== null) {
+      encontroAlguno = true;
+      const dia = normalizarDiaTexto(match[1]) || "Lu";
+      const modIni = parseInt(match[2], 10);
+      const modFin = match[3] ? parseInt(match[3], 10) : modIni;
+
+      if (isNaN(modIni) || isNaN(modFin) || modIni < 1 || modFin > 20 || modFin < modIni) {
+        errores.push(`Módulo fuera de rango M1-M20 en "${match[0]}"`);
+        continue;
+      }
+
+      for (let m = modIni; m <= modFin; m++) {
+        slots.push({ dia, modulo: m });
+      }
+    }
+
+    if (!encontroAlguno) {
+      errores.push(`Formato de horario no reconocido: "${texto}"`);
+    }
+
+    return { slots, errores };
+  }
+
+  function formatearSlotsCompacto(slots) {
+    if (!slots || slots.length === 0) return "Sin horario";
+    const porDia = {};
+    for (const s of slots) {
+      if (!porDia[s.dia]) porDia[s.dia] = [];
+      if (!porDia[s.dia].includes(s.modulo)) porDia[s.dia].push(s.modulo);
+    }
+
+    const partes = [];
+    for (const d of DIAS_ORDEN) {
+      const mods = porDia[d];
+      if (!mods || mods.length === 0) continue;
+      mods.sort((a, b) => a - b);
+      let ini = mods[0];
+      let prev = mods[0];
+      for (let i = 1; i <= mods.length; i++) {
+        const actual = mods[i];
+        if (actual === prev + 1) {
+          prev = actual;
+        } else {
+          partes.push(ini === prev ? `.${d} ${ini}` : `.${d} ${ini}-${prev}`);
+          ini = actual;
+          prev = actual;
+        }
+      }
+    }
+    return partes.join(", ");
+  }
+
+  function extraerHorarioDeFila(celdas, mapa, obtenerCelda) {
+    // A. Columna HORARIO única
+    const horarioColUnica = obtenerCelda(celdas, "horario");
+    if (horarioColUnica) {
+      const res = parsearHorario(horarioColUnica);
+      return {
+        textoOriginal: horarioColUnica,
+        slots: res.slots,
+        errores: res.errores
+      };
+    }
+
+    // B. Columnas separadas por día (LUNES..SABADO)
+    const mapaColsDia = [
+      { campo: "colLu", dia: "Lu" },
+      { campo: "colMa", dia: "Ma" },
+      { campo: "colMi", dia: "Mi" },
+      { campo: "colJu", dia: "Ju" },
+      { campo: "colVi", dia: "Vi" },
+      { campo: "colSa", dia: "Sa" }
+    ];
+    const tieneColsPorDia = mapaColsDia.some(d => mapa[d.campo] !== undefined);
+    if (tieneColsPorDia) {
+      const slots = [];
+      const errores = [];
+      for (const item of mapaColsDia) {
+        const valDia = obtenerCelda(celdas, item.campo);
+        if (!valDia) continue;
+        const textoConDia = /^[a-zA-Z.]/.test(valDia) ? valDia : `.${item.dia} ${valDia}`;
+        const parsed = parsearHorario(textoConDia);
+        slots.push(...parsed.slots);
+        errores.push(...parsed.errores);
+      }
+      const fmt = formatearSlotsCompacto(slots);
+      return {
+        textoOriginal: fmt === "Sin horario" ? "" : fmt,
+        slots,
+        errores
+      };
+    }
+
+    // C. Columnas separadas DIA + (MODULO o HORA INICIO / HORA FIN)
+    const diaVal = obtenerCelda(celdas, "dia");
+    if (diaVal) {
+      const diaNorm = normalizarDiaTexto(diaVal);
+      if (diaNorm) {
+        const modVal = obtenerCelda(celdas, "modulo");
+        if (modVal) {
+          const textoComb = `.${diaNorm} ${modVal}`;
+          const parsed = parsearHorario(textoComb);
+          const fmt = formatearSlotsCompacto(parsed.slots);
+          return {
+            textoOriginal: fmt === "Sin horario" ? textoComb : fmt,
+            slots: parsed.slots,
+            errores: parsed.errores
+          };
+        }
+        const hIni = parsearMinutosHoraReloj(obtenerCelda(celdas, "horaInicio"));
+        const hFin = parsearMinutosHoraReloj(obtenerCelda(celdas, "horaFin"));
+        if (hIni !== null) {
+          const mods = rangoMinutosAModulos(hIni, hFin);
+          const slots = mods.map(m => ({ dia: diaNorm, modulo: m }));
+          const fmt = formatearSlotsCompacto(slots);
+          return {
+            textoOriginal: fmt === "Sin horario" ? "" : fmt,
+            slots,
+            errores: []
+          };
+        }
+      }
+    }
+
+    return { textoOriginal: "", slots: [], errores: [] };
+  }
+
+  function clasificarJornadaSeccion(slots, jornadaExplicita) {
+    if (!slots || slots.length === 0) {
+      return { jornada: "Sin horario", cruceJornada: false, difiereExplicita: false };
+    }
+
+    let diurnos = 0;
+    let vespertinos = 0;
+    let fueraRango = 0;
+
+    for (const s of slots) {
+      if (s.dia === "Sa") {
+        if (s.modulo >= 1 && s.modulo <= 6) vespertinos++;
+        else fueraRango++;
+      } else {
+        if (s.modulo >= 1 && s.modulo <= 11) diurnos++;
+        else if (s.modulo >= 15 && s.modulo <= 20) vespertinos++;
+        else fueraRango++;
+      }
+    }
+
+    const cruceJornada = (diurnos > 0 && vespertinos > 0) || fueraRango > 0;
+    const jornadaCalculada = vespertinos > diurnos ? "Vespertino" : "Diurno";
+
+    let difiereExplicita = false;
+    if (jornadaExplicita) {
+      const jExp = limpiarClaveColumna(jornadaExplicita);
+      if ((jExp.includes("VES") && jornadaCalculada !== "Vespertino") ||
+          (jExp.includes("DIU") && jornadaCalculada !== "Diurno")) {
+        difiereExplicita = true;
+      }
+    }
+
+    return { jornada: jornadaCalculada, cruceJornada, difiereExplicita };
+  }
+
+  function esNombreDocenteValido(nombre) {
+    if (!nombre) return false;
+    const up = String(nombre).trim().toUpperCase();
+    return Boolean(up && !["SIN DOCENTE", "SIN AYUDANTE", "POR DEFINIR", "VACANTE", "PENDIENTE", "S/D", "-", "N/A"].includes(up));
+  }
+
+  // ============================================================================
+  // 4. PROCESAMIENTO DE PLANILLA Y GESTIÓN DE DECISIONES DEL DIRECTOR DE CARRERA
+  // ============================================================================
+  function restaurarEstadoOriginalPlanilla(datos) {
+    const mapOrigPorClave = new Map();
+    for (const f of datos.filasOriginales) {
+      if (!mapOrigPorClave.has(f.claveRegistro)) {
+        mapOrigPorClave.set(f.claveRegistro, f);
+      }
+    }
+    for (const s of datos.secciones) {
+      const orig = mapOrigPorClave.get(s.id);
+      s.confirma = orig ? (orig.confirmaDocente || "") : "";
+      s.nuevoDocente = orig ? (orig.nombreNvoDocente || "") : "";
+      s.nuevoRut = orig ? (normalizarRut(orig.rutNvoDocente).clave || orig.rutNvoDocente || "") : "";
+      s.perfilListo = orig ? (orig.perfilListo || "") : "";
+      s.solicitudHorario = orig ? (orig.solicitudes || "") : "";
+      s.justificacionHorario = orig ? (orig.justificacion || "") : "";
+      s.fechaSolicitudHorario = "";
+    }
+  }
+
+  function procesarDatosPlanilla(nombreArchivo, hojas) {
+    const { hoja, idxEncabezado, mapa } = detectarFilaEncabezadoYMapeo(hojas);
+    const filasDatos = hoja.filasMatriz.slice(idxEncabezado + 1);
+    const sedeInferida = inferirSedeDesdeArchivo(nombreArchivo);
+
+    const obtenerCelda = (celdas, campo) => {
+      const col = mapa[campo];
+      if (col === undefined) return "";
+      const val = celdas[col];
+      return val !== undefined && val !== null ? String(val).trim() : "";
+    };
+
+    let totalFilasLeidas = 0;
+    let registrosNoTeoOmitidos = 0;
+    const filasOriginales = [];
+    const mapaSecciones = new Map();
+    const mapaAyudantias = new Map();
+
+    for (const filaObj of filasDatos) {
+      const { numFilaExcel, celdas } = filaObj;
+      const codigoRaw = obtenerCelda(celdas, "codigo").toUpperCase().replace(/\s+/g, "");
+      const seccionRaw = obtenerCelda(celdas, "seccion");
+      const asignaturaRaw = obtenerCelda(celdas, "asignatura");
+
+      if (!codigoRaw && !seccionRaw && !asignaturaRaw) continue;
+      if (codigoRaw.startsWith("TOTAL") || asignaturaRaw.toUpperCase().startsWith("TOTAL GENERAL")) continue;
+      if (!codigoRaw && !seccionRaw) continue;
+
+      totalFilasLeidas++;
+
+      const tipoRaw = obtenerCelda(celdas, "tipo").toUpperCase().trim();
+      const tipoEfectivo = mapa.tipo !== undefined && tipoRaw !== "" ? tipoRaw : "TEO";
+      const esAyi = tipoEfectivo === "AYI" || tipoEfectivo.includes("AYUD");
+      const esTeo = tipoEfectivo === "TEO" || tipoEfectivo.startsWith("CAT") || tipoEfectivo.startsWith("TEOR");
+
+      const claveRegistro = `${codigoRaw || "SINCOD"}__${seccionRaw || "SINSEC"}__${esAyi ? "AYI" : (esTeo ? "TEO" : tipoEfectivo)}`;
+
+      // Reconstruir nombre si viene separado en apellidos + nombres
+      let profPropCell = obtenerCelda(celdas, "profPropuesto");
+      if (!profPropCell && (mapa.apellidoPaterno !== undefined || mapa.nombresDocente !== undefined)) {
+        const apPat = obtenerCelda(celdas, "apellidoPaterno");
+        const apMat = obtenerCelda(celdas, "apellidoMaterno");
+        const noms = obtenerCelda(celdas, "nombresDocente");
+        profPropCell = [apPat, apMat, noms].filter(Boolean).join(" ").trim();
+      }
+
+      // Reconstruir RUT si viene separado de DV
+      let rutPropCell = obtenerCelda(celdas, "rutPropuesto");
+      const dvPropCell = obtenerCelda(celdas, "dvPropuesto");
+      if (rutPropCell && dvPropCell && !rutPropCell.toUpperCase().endsWith(dvPropCell.toUpperCase())) {
+        rutPropCell = `${rutPropCell}-${dvPropCell}`;
+      }
+
+      const infoHorarioFila = extraerHorarioDeFila(celdas, mapa, obtenerCelda);
+
+      const registroFilaOriginal = {
+        numFilaExcel,
+        claveRegistro,
+        sede: obtenerCelda(celdas, "sede") || sedeInferida,
+        area: obtenerCelda(celdas, "area"),
+        tipo: tipoRaw || tipoEfectivo,
+        codigo: codigoRaw,
+        asignatura: asignaturaRaw,
+        seccion: seccionRaw,
+        horario: infoHorarioFila.textoOriginal === "Sin horario" ? "" : infoHorarioFila.textoOriginal,
+        profPropuesto: profPropCell,
+        rutDocente: rutPropCell,
+        gradoAcademico: obtenerCelda(celdas, "grado"),
+        confirmaDocente: normalizarSiNo(obtenerCelda(celdas, "confirma")),
+        nombreNvoDocente: obtenerCelda(celdas, "nuevoDocente"),
+        rutNvoDocente: obtenerCelda(celdas, "nuevoRut"),
+        perfilListo: normalizarSiNo(obtenerCelda(celdas, "perfil")),
+        numIngresoGoa: obtenerCelda(celdas, "goa"),
+        comentariosGoa: obtenerCelda(celdas, "comentarios"),
+        solicitudes: obtenerCelda(celdas, "solicitudes"),
+        justificacion: obtenerCelda(celdas, "justificacion")
+      };
+      filasOriginales.push(registroFilaOriginal);
+
+      const rutPropNorm = normalizarRut(registroFilaOriginal.rutDocente);
+      const tieneProfProp = esNombreDocenteValido(registroFilaOriginal.profPropuesto);
+
+      if (!esTeo) {
+        registrosNoTeoOmitidos++;
+        if (esAyi) {
+          const infoMalla = MALLA_OFICIAL[codigoRaw] || null;
+          const areaFinal = registroFilaOriginal.area.toUpperCase().trim() || (infoMalla ? infoMalla.area : "SIN AREA");
+          let semestreFinal = infoMalla ? infoMalla.semestre : 0;
+          let anioFinal = infoMalla ? infoMalla.anio : 0;
+          if (!infoMalla && mapa.semestre !== undefined) {
+            const semNum = parseInt(obtenerCelda(celdas, "semestre").replace(/\D/g, ""), 10);
+            if (!isNaN(semNum) && semNum >= 1 && semNum <= 10) {
+              semestreFinal = semNum;
+              anioFinal = Math.ceil(semNum / 2);
+            }
+          }
+
+          if (!mapaAyudantias.has(claveRegistro)) {
+            mapaAyudantias.set(claveRegistro, {
+              id: claveRegistro,
+              sede: registroFilaOriginal.sede || sedeInferida,
+              codigo: codigoRaw,
+              asignatura: asignaturaRaw || (infoMalla ? infoMalla.nombre : "Sin nombre"),
+              seccion: seccionRaw,
+              tipo: "AYI",
+              area: areaFinal,
+              anio: anioFinal,
+              semestre: semestreFinal,
+              profPropuesto: tieneProfProp ? registroFilaOriginal.profPropuesto.replace(/\s+/g, " ") : "",
+              rutPropClave: rutPropNorm.clave || "",
+              rutPropFormateado: rutPropNorm.formateado || "",
+              grado: registroFilaOriginal.gradoAcademico || "",
+              confirma: registroFilaOriginal.confirmaDocente || "",
+              nuevoDocente: registroFilaOriginal.nombreNvoDocente || "",
+              nuevoRut: normalizarRut(registroFilaOriginal.rutNvoDocente).clave || registroFilaOriginal.rutNvoDocente || "",
+              perfilListo: registroFilaOriginal.perfilListo || "",
+              goa: registroFilaOriginal.numIngresoGoa || "",
+              comentarios: registroFilaOriginal.comentariosGoa || "",
+              solicitudHorario: registroFilaOriginal.solicitudes || "",
+              justificacionHorario: registroFilaOriginal.justificacion || "",
+              fechaSolicitudHorario: "",
+              filasExcel: [numFilaExcel]
+            });
+          } else {
+            const ayiEx = mapaAyudantias.get(claveRegistro);
+            ayiEx.filasExcel.push(numFilaExcel);
+            if (tieneProfProp && !ayiEx.profPropuesto) {
+              ayiEx.profPropuesto = registroFilaOriginal.profPropuesto.replace(/\s+/g, " ");
+            }
+            if (rutPropNorm.clave && !ayiEx.rutPropClave) {
+              ayiEx.rutPropClave = rutPropNorm.clave;
+              ayiEx.rutPropFormateado = rutPropNorm.formateado;
+            }
+          }
+        }
+        continue;
+      }
+
+      // Consolidación de Cátedra (TEO)
+      const horarioTexto = registroFilaOriginal.horario;
+      const { slots, errores: erroresHorario } = infoHorarioFila;
+
+      if (!mapaSecciones.has(claveRegistro)) {
+        const infoMalla = MALLA_OFICIAL[codigoRaw] || null;
+        const areaFinal = registroFilaOriginal.area.toUpperCase().trim() || (infoMalla ? infoMalla.area : "SIN AREA");
+
+        let semestreFinal = infoMalla ? infoMalla.semestre : 0;
+        let anioFinal = infoMalla ? infoMalla.anio : 0;
+        if (!infoMalla && mapa.semestre !== undefined) {
+          const semNum = parseInt(obtenerCelda(celdas, "semestre").replace(/\D/g, ""), 10);
+          if (!isNaN(semNum) && semNum >= 1 && semNum <= 10) {
+            semestreFinal = semNum;
+            anioFinal = Math.ceil(semNum / 2);
+          }
+        }
+
+        mapaSecciones.set(claveRegistro, {
+          id: claveRegistro,
+          sede: registroFilaOriginal.sede || sedeInferida,
+          codigo: codigoRaw,
+          asignatura: asignaturaRaw || (infoMalla ? infoMalla.nombre : "Sin nombre"),
+          seccion: seccionRaw,
+          tipo: "TEO",
+          nrc: obtenerCelda(celdas, "nrc") || "",
+          area: areaFinal,
+          anio: anioFinal,
+          semestre: semestreFinal,
+          enMallaOficial: Boolean(infoMalla),
+          horasTeoMalla: infoMalla ? infoMalla.horasTeo : null,
+          jornadaExplicita: obtenerCelda(celdas, "jornada"),
+          profPropuesto: tieneProfProp ? registroFilaOriginal.profPropuesto.replace(/\s+/g, " ") : "",
+          rutPropClave: tieneProfProp ? (rutPropNorm.clave || `SINRUT_${limpiarClaveColumna(registroFilaOriginal.profPropuesto)}`) : "",
+          rutPropFormateado: tieneProfProp ? (rutPropNorm.formateado || "Sin RUT") : "",
+          rutPropRaw: registroFilaOriginal.rutDocente || "",
+          grado: registroFilaOriginal.gradoAcademico || "",
+          // Campos gestionables por Director de Carrera
+          confirma: registroFilaOriginal.confirmaDocente || "",
+          nuevoDocente: registroFilaOriginal.nombreNvoDocente || "",
+          nuevoRut: normalizarRut(registroFilaOriginal.rutNvoDocente).clave || registroFilaOriginal.rutNvoDocente || "",
+          perfilListo: registroFilaOriginal.perfilListo || "",
+          solicitudHorario: registroFilaOriginal.solicitudes || "",
+          justificacionHorario: registroFilaOriginal.justificacion || "",
+          fechaSolicitudHorario: "",
+          // Campos GOA preservados
+          goa: registroFilaOriginal.numIngresoGoa || "",
+          comentarios: registroFilaOriginal.comentariosGoa || "",
+          filasExcel: [numFilaExcel],
+          horariosOriginales: horarioTexto ? [horarioTexto] : [],
+          slotsMap: new Map(),
+          erroresHorario: [...erroresHorario]
+        });
+      } else {
+        const secExistente = mapaSecciones.get(claveRegistro);
+        secExistente.filasExcel.push(numFilaExcel);
+        if (horarioTexto) secExistente.horariosOriginales.push(horarioTexto);
+        secExistente.erroresHorario.push(...erroresHorario);
+
+        if (tieneProfProp && !secExistente.profPropuesto) {
+          secExistente.profPropuesto = registroFilaOriginal.profPropuesto.replace(/\s+/g, " ");
+          secExistente.rutPropClave = rutPropNorm.clave || `SINRUT_${limpiarClaveColumna(registroFilaOriginal.profPropuesto)}`;
+          secExistente.rutPropFormateado = rutPropNorm.formateado || "Sin RUT";
+          secExistente.rutPropRaw = registroFilaOriginal.rutDocente || "";
+        }
+      }
+
+      const secObj = mapaSecciones.get(claveRegistro);
+      for (const sl of slots) {
+        secObj.slotsMap.set(`${sl.dia}_${sl.modulo}`, sl);
+      }
+    }
+
+    const sedePrincipal = filasOriginales.length > 0 && filasOriginales[0].sede ? filasOriginales[0].sede : sedeInferida;
+
+    // Post-procesamiento de secciones TEO (sin modificar la planilla base)
+    const secciones = [];
+    for (const sec of mapaSecciones.values()) {
+      const slotsOrdenados = Array.from(sec.slotsMap.values()).sort((a, b) => {
+        const dA = DIAS_ORDEN.indexOf(a.dia);
+        const dB = DIAS_ORDEN.indexOf(b.dia);
+        return dA !== dB ? dA - dB : a.modulo - b.modulo;
+      });
+
+      const { jornada, cruceJornada, difiereExplicita } = clasificarJornadaSeccion(slotsOrdenados, sec.jornadaExplicita);
+      const numBloques = slotsOrdenados.length;
+      const minutosSemanales = numBloques * 45;
+
+      secciones.push({
+        ...sec,
+        slots: slotsOrdenados,
+        horarioConsolidado: formatearSlotsCompacto(slotsOrdenados),
+        bloques: numBloques,
+        minutos: minutosSemanales,
+        horasCronologicas: +(minutosSemanales / 60).toFixed(2),
+        jornada,
+        cruceJornada,
+        difiereExplicita,
+        filaExcelTexto: sec.filasExcel.join(", ")
+      });
+    }
+
+    secciones.sort((a, b) => {
+      if (a.semestre !== b.semestre) {
+        if (a.semestre === 0) return 1;
+        if (b.semestre === 0) return -1;
+        return a.semestre - b.semestre;
+      }
+      if (a.codigo !== b.codigo) return a.codigo.localeCompare(b.codigo);
+      return String(a.seccion).localeCompare(String(b.seccion), undefined, { numeric: true });
+    });
+
+    // Post-procesamiento de Ayudantías (AYI)
+    const ayudantias = [];
+    for (const ayi of mapaAyudantias.values()) {
+      const tieneNombreProp = Boolean(ayi.profPropuesto);
+      const tieneRutProp = Boolean(ayi.rutPropClave);
+      ayudantias.push({
+        ...ayi,
+        tieneNombre: tieneNombreProp || Boolean(ayi.nuevoDocente),
+        tieneRut: tieneRutProp || Boolean(normalizarRut(ayi.nuevoRut).clave),
+        cumple: (tieneNombreProp && tieneRutProp) || (Boolean(ayi.nuevoDocente) && Boolean(normalizarRut(ayi.nuevoRut).clave)),
+        filaExcelTexto: ayi.filasExcel.join(", ")
+      });
+    }
+
+    ayudantias.sort((a, b) => {
+      if (a.semestre !== b.semestre) {
+        if (a.semestre === 0) return 1;
+        if (b.semestre === 0) return -1;
+        return a.semestre - b.semestre;
+      }
+      if (a.codigo !== b.codigo) return a.codigo.localeCompare(b.codigo);
+      return String(a.seccion).localeCompare(String(b.seccion), undefined, { numeric: true });
+    });
+
+    const datosProcesados = {
+      nombreArchivo,
+      sede: sedePrincipal,
+      totalFilasLeidas,
+      registrosNoTeoOmitidos,
+      filasOriginales,
+      secciones,
+      ayudantias,
+      docentes: [],
+      docentesEfectivosHorario: [],
+      choquesDocente: [],
+      topesMalla: [],
+      docentesMasDe2Cursos: [],
+      coberturas: []
+    };
+
+    recalcularDerivadosPlanilla(datosProcesados);
+    return datosProcesados;
+  }
+
+  /**
+   * Determina el docente efectivo de una sección (si CONFIRMA = NO y hay nuevo docente, usa el nuevo; de lo contrario el propuesto).
+   */
+  function obtenerDocenteEfectivoSeccion(sec) {
+    if (sec.confirma === "NO" && esNombreDocenteValido(sec.nuevoDocente)) {
+      const rutN = normalizarRut(sec.nuevoRut);
+      return {
+        esReemplazo: true,
+        nombre: sec.nuevoDocente.trim(),
+        rutClave: rutN.clave || `SINRUT_${limpiarClaveColumna(sec.nuevoDocente)}`,
+        rutFormateado: rutN.formateado || sec.nuevoRut || "Sin RUT",
+        grado: sec.grado || "sin dato"
+      };
+    }
+    if (esNombreDocenteValido(sec.profPropuesto)) {
+      return {
+        esReemplazo: false,
+        nombre: sec.profPropuesto,
+        rutClave: sec.rutPropClave || `SINRUT_${limpiarClaveColumna(sec.profPropuesto)}`,
+        rutFormateado: sec.rutPropFormateado || "Sin RUT",
+        grado: sec.grado || "sin dato"
+      };
+    }
+    return {
+      esReemplazo: false,
+      nombre: "",
+      rutClave: "",
+      rutFormateado: "",
+      grado: sec.grado || "sin dato"
+    };
+  }
+
+  /**
+   * Retorna los slots vigentes para visualizar/evaluar en grilla (si hay solicitud horaria válida, usa esos slots).
+   */
+  function obtenerSlotsEfectivosSeccion(sec) {
+    if (sec.solicitudHorario && sec.solicitudHorario.trim()) {
+      const parsed = parsearHorario(sec.solicitudHorario);
+      if (parsed.slots.length > 0) return parsed.slots;
+    }
+    return sec.slots;
+  }
+
+  function formatearFechaHoraAhora() {
+    const ahora = new Date();
+    const dd = String(ahora.getDate()).padStart(2, "0");
+    const mm = String(ahora.getMonth() + 1).padStart(2, "0");
+    const yyyy = ahora.getFullYear();
+    const hh = String(ahora.getHours()).padStart(2, "0");
+    const min = String(ahora.getMinutes()).padStart(2, "0");
+    return `${dd}/${mm}/${yyyy} ${hh}:${min}`;
+  }
+
+  function recalcularDerivadosPlanilla(datos) {
+    const secciones = datos.secciones || [];
+    const mapaDocentesProp = new Map();
+    const seccionesVacantes = [];
+
+    for (const sec of secciones) {
+      if (!sec.profPropuesto) {
+        seccionesVacantes.push(sec);
+        continue;
+      }
+      if (!mapaDocentesProp.has(sec.rutPropClave)) {
+        mapaDocentesProp.set(sec.rutPropClave, {
+          esVacante: false,
+          rutClave: sec.rutPropClave,
+          rutFormateado: sec.rutPropFormateado,
+          nombre: sec.profPropuesto,
+          grado: sec.grado || "sin dato",
+          areas: new Set([sec.area]),
+          secciones: [],
+          choques: []
+        });
+      }
+      const doc = mapaDocentesProp.get(sec.rutPropClave);
+      doc.areas.add(sec.area);
+      if ((!doc.grado || doc.grado === "sin dato") && sec.grado) doc.grado = sec.grado;
+      doc.secciones.push(sec);
+    }
+
+    const listaDocentes = Array.from(mapaDocentesProp.values()).map(d => ({
+      ...d,
+      areasLista: Array.from(d.areas),
+      numCursos: d.secciones.length
+    })).sort((a, b) => b.numCursos - a.numCursos || a.nombre.localeCompare(b.nombre));
+
+    // Incluir secciones sin profesor propuesto al final para que también puedan ser completadas
+    for (const vac of seccionesVacantes) {
+      listaDocentes.push({
+        esVacante: true,
+        seccionVacanteId: vac.id,
+        rutClave: `VACANTE_${vac.id}`,
+        rutFormateado: "—",
+        nombre: "SIN PROFESOR PROPUESTO (Vacante)",
+        grado: vac.grado || "—",
+        areas: new Set([vac.area]),
+        areasLista: [vac.area],
+        secciones: [vac],
+        numCursos: 1,
+        choques: []
+      });
+    }
+
+    datos.docentes = listaDocentes;
+
+    // 2. Agrupación de Docentes Efectivos (para Grilla Horaria M1-M20 y cálculo de choques reales)
+    const mapaDocEfectivos = new Map();
+    for (const sec of secciones) {
+      const ef = obtenerDocenteEfectivoSeccion(sec);
+      if (!ef.nombre) continue;
+      if (!mapaDocEfectivos.has(ef.rutClave)) {
+        mapaDocEfectivos.set(ef.rutClave, {
+          rutClave: ef.rutClave,
+          rutFormateado: ef.rutFormateado,
+          nombre: ef.nombre,
+          secciones: [],
+          totalBloques: 0,
+          choques: []
+        });
+      }
+      const dEf = mapaDocEfectivos.get(ef.rutClave);
+      dEf.secciones.push(sec);
+      dEf.totalBloques += sec.bloques;
+    }
+
+    const choquesDocente = [];
+    for (const dEf of mapaDocEfectivos.values()) {
+      const ocupacion = new Map();
+      for (const sec of dEf.secciones) {
+        for (const sl of obtenerSlotsEfectivosSeccion(sec)) {
+          const k = `${sl.dia}_${sl.modulo}`;
+          if (!ocupacion.has(k)) ocupacion.set(k, []);
+          ocupacion.get(k).push(sec);
+        }
+      }
+      const paresChoque = new Map();
+      for (const [k, listaSec] of ocupacion.entries()) {
+        if (listaSec.length > 1) {
+          const [dia, mod] = k.split("_");
+          const ids = listaSec.map(s => `${s.codigo}-${s.seccion}`).sort().join(" vs ");
+          if (!paresChoque.has(ids)) {
+            paresChoque.set(ids, {
+              docente: dEf.nombre,
+              rut: dEf.rutFormateado,
+              rutClave: dEf.rutClave,
+              secciones: listaSec,
+              modulosCruzados: []
+            });
+          }
+          paresChoque.get(ids).modulosCruzados.push(`.${dia} M${mod}`);
+        }
+      }
+      for (const ch of paresChoque.values()) {
+        choquesDocente.push(ch);
+        dEf.choques.push(ch);
+      }
+    }
+
+    // Vincular choques a las filas de la tabla docentes
+    for (const docRow of datos.docentes) {
+      docRow.choques = choquesDocente.filter(ch =>
+        ch.secciones.some(sCh => docRow.secciones.some(sRow => sRow.id === sCh.id))
+      );
+    }
+
+    datos.docentesEfectivosHorario = Array.from(mapaDocEfectivos.values()).sort((a, b) => a.nombre.localeCompare(b.nombre));
+    datos.choquesDocente = choquesDocente;
+    datos.docentesMasDe2Cursos = datos.docentes.filter(d => !d.esVacante && d.numCursos > 2);
+
+    // 3. Topes de malla
+    const topesMalla = [];
+    const mapaCohorteBloque = new Map();
+    for (const sec of secciones) {
+      if (sec.semestre <= 0 || sec.jornada === "Sin horario") continue;
+      for (const sl of sec.slots) {
+        const claveTope = `A${sec.anio}_S${sec.semestre}_${sec.jornada}_${sl.dia}_${sl.modulo}`;
+        if (!mapaCohorteBloque.has(claveTope)) mapaCohorteBloque.set(claveTope, []);
+        mapaCohorteBloque.get(claveTope).push(sec);
+      }
+    }
+    const topesAgrupados = new Map();
+    for (const [claveTope, listaSec] of mapaCohorteBloque.entries()) {
+      const codigosUnicos = new Set(listaSec.map(s => s.codigo));
+      if (codigosUnicos.size > 1) {
+        const partes = claveTope.split("_");
+        const parCodigos = Array.from(codigosUnicos).sort().join(" + ");
+        const claveGrupo = `${partes[0]}_${partes[1]}_${partes[2]}__${parCodigos}`;
+        if (!topesAgrupados.has(claveGrupo)) {
+          topesAgrupados.set(claveGrupo, {
+            anio: listaSec[0].anio,
+            semestre: listaSec[0].semestre,
+            jornada: listaSec[0].jornada,
+            secciones: listaSec,
+            bloques: []
+          });
+        }
+        topesAgrupados.get(claveGrupo).bloques.push(`.${partes[3]} M${partes[4]}`);
+      }
+    }
+    for (const t of topesAgrupados.values()) topesMalla.push(t);
+    datos.topesMalla = topesMalla;
+
+    // 4. Cobertura por Cohorte
+    const mapaCobertura = new Map();
+    for (const sec of secciones) {
+      const claveCob = `${sec.anio}_${sec.semestre}_${sec.jornada}`;
+      if (!mapaCobertura.has(claveCob)) {
+        mapaCobertura.set(claveCob, {
+          anio: sec.anio,
+          semestre: sec.semestre,
+          jornada: sec.jornada,
+          totalSecciones: 0,
+          conDocenteEfectivo: 0,
+          sinDocente: 0,
+          confirmadasSi: 0,
+          reemplazosNo: 0,
+          pendientes: 0
+        });
+      }
+      const cob = mapaCobertura.get(claveCob);
+      cob.totalSecciones++;
+      const ef = obtenerDocenteEfectivoSeccion(sec);
+      if (ef.nombre) cob.conDocenteEfectivo++;
+      else cob.sinDocente++;
+
+      if (sec.confirma === "SI") cob.confirmadasSi++;
+      else if (sec.confirma === "NO") cob.reemplazosNo++;
+      else cob.pendientes++;
+    }
+
+    datos.coberturas = Array.from(mapaCobertura.values()).sort((a, b) => {
+      if (a.semestre !== b.semestre) {
+        if (a.semestre === 0) return 1;
+        if (b.semestre === 0) return -1;
+        return a.semestre - b.semestre;
+      }
+      return a.jornada.localeCompare(b.jornada);
+    });
+  }
+
+  /**
+   * Evalúa si un horario propuesto para una sección genera choque docente, tope de malla o cruce de jornada.
+   * Retorna advertencias sin bloquear el guardado de la solicitud.
+   */
+  function evaluarCompatibilidadSolicitudHorario(datos, sec, cadenaHorarioSolicitado, confirmaTentativo, nuevoDocenteTentativo, nuevoRutTentativo) {
+    const texto = String(cadenaHorarioSolicitado || "").trim();
+    if (!texto) {
+      return { hayCambio: false, validoSintaxis: true, textoNormalizado: "", advertencias: [] };
+    }
+
+    const { slots, errores } = parsearHorario(texto);
+    if (errores.length > 0 || slots.length === 0) {
+      return {
+        hayCambio: true,
+        validoSintaxis: false,
+        textoNormalizado: texto,
+        advertencias: errores.length > 0 ? errores : ["No se reconocieron bloques válidos (ejemplo esperado: .Lu 10-11, .Vi 10-11)."]
+      };
+    }
+
+    const textoNorm = formatearSlotsCompacto(slots);
+    const advertencias = [];
+
+    // 1. Verificar cruce de jornada o diferencia de módulos con malla
+    const clasif = clasificarJornadaSeccion(slots, sec.jornadaExplicita);
+    if (clasif.cruceJornada) {
+      advertencias.push(`El horario solicitado (${textoNorm}) mezcla bloques diurnos (M1–M11) y vespertinos (M15–M20).`);
+    }
+    if (sec.enMallaOficial && sec.horasTeoMalla !== null && slots.length !== sec.horasTeoMalla) {
+      advertencias.push(`La solicitud considera ${slots.length} bloques semanales, pero la malla oficial exige ${sec.horasTeoMalla} bloques para ${sec.codigo}.`);
+    }
+
+    // 2. Determinar quién dictará el curso (docente propuesto o nuevo docente)
+    let nombreDocEvaluar = sec.profPropuesto;
+    let rutClaveEvaluar = sec.rutPropClave;
+    if (confirmaTentativo === "NO" && esNombreDocenteValido(nuevoDocenteTentativo)) {
+      nombreDocEvaluar = nuevoDocenteTentativo.trim();
+      const rn = normalizarRut(nuevoRutTentativo);
+      rutClaveEvaluar = rn.clave || `SINRUT_${limpiarClaveColumna(nombreDocEvaluar)}`;
+    }
+
+    // 3. Verificar choque con otras secciones del mismo docente en la sede
+    if (rutClaveEvaluar) {
+      const slotsSet = new Set(slots.map(s => `${s.dia}_${s.modulo}`));
+      for (const otraSec of datos.secciones) {
+        if (otraSec.id === sec.id) continue;
+        const efOtra = obtenerDocenteEfectivoSeccion(otraSec);
+        if (efOtra.rutClave === rutClaveEvaluar) {
+          const cruzados = [];
+          for (const slOtra of obtenerSlotsEfectivosSeccion(otraSec)) {
+            const k = `${slOtra.dia}_${slOtra.modulo}`;
+            if (slotsSet.has(k)) cruzados.push(`.${slOtra.dia} M${slOtra.modulo}`);
+          }
+          if (cruzados.length > 0) {
+            advertencias.push(`Choque horario con ${otraSec.codigo} Sec. ${otraSec.seccion} (${otraSec.asignatura}) dictada por ${nombreDocEvaluar} en ${cruzados.join(", ")}.`);
+          }
+        }
+      }
+    }
+
+    // 4. Verificar tope de malla con asignaturas del mismo Año + Semestre + Jornada
+    if (sec.semestre > 0 && clasif.jornada !== "Sin horario") {
+      const slotsSet = new Set(slots.map(s => `${s.dia}_${s.modulo}`));
+      for (const otraSec of datos.secciones) {
+        if (otraSec.id === sec.id || otraSec.codigo === sec.codigo) continue;
+        if (otraSec.anio === sec.anio && otraSec.semestre === sec.semestre && otraSec.jornada === clasif.jornada) {
+          const cruzados = [];
+          for (const slOtra of obtenerSlotsEfectivosSeccion(otraSec)) {
+            const k = `${slOtra.dia}_${slOtra.modulo}`;
+            if (slotsSet.has(k)) cruzados.push(`.${slOtra.dia} M${slOtra.modulo}`);
+          }
+          if (cruzados.length > 0) {
+            advertencias.push(`Tope de malla (${sec.anio}° Año · S${sec.semestre} ${clasif.jornada}) con ${otraSec.codigo} (${otraSec.asignatura}) en ${cruzados.join(", ")}.`);
+          }
+        }
+      }
+    }
+
+    return {
+      hayCambio: true,
+      validoSintaxis: true,
+      textoNormalizado: textoNorm,
+      advertencias
+    };
+  }
+
+  // ============================================================================
+  // 5. ESTADO GLOBAL DE UI Y RENDERIZADO DE LAS 5 PESTAÑAS
+  // ============================================================================
+  let archivosCargados = [];
+  let indiceArchivoActivo = -1;
+  let modoHorarioActual = "cohorte";
+  let nivelZoomHorario = 100;
+  let toastTimeout = null;
+
+  function mostrarToast(mensaje) {
+    const el = document.getElementById("toast-aviso");
+    if (!el) return;
+    el.textContent = mensaje;
+    el.classList.add("visible");
+    clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => el.classList.remove("visible"), 3400);
+  }
+
+  function obtenerDatosActivos() {
+    if (indiceArchivoActivo < 0 || indiceArchivoActivo >= archivosCargados.length) return null;
+    return archivosCargados[indiceArchivoActivo];
+  }
+
+  function escaparHtml(str) {
+    return String(str ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function activarPestana(nombreTab) {
+    document.querySelectorAll("#nav-tabs button").forEach(btn => {
+      btn.classList.toggle("activo", btn.dataset.tab === nombreTab);
+    });
+    document.querySelectorAll("main .vista").forEach(sec => {
+      sec.classList.toggle("activa", sec.id === `vista-${nombreTab}`);
+    });
+  }
+
+  function renderizarTodo() {
+    const datos = obtenerDatosActivos();
+    if (!datos) return;
+
+    recalcularDerivadosPlanilla(datos);
+
+    document.getElementById("vista-vacia").style.display = "none";
+    document.querySelectorAll("#nav-tabs button").forEach(b => b.disabled = false);
+    document.getElementById("btn-finalizar-revision").disabled = false;
+    document.getElementById("btn-descargar-oficial").disabled = false;
+
+    const inicialSede = (datos.sede || "U").trim().charAt(0).toUpperCase();
+    document.getElementById("logo-sede").textContent = inicialSede;
+    document.getElementById("titulo-app").textContent = `Confirmación Docente · Sede ${datos.sede}`;
+    document.getElementById("subtitulo-app").textContent =
+      `Archivo base: ${datos.nombreArchivo} · ${datos.secciones.length} secciones TEO · ${datos.ayudantias.length} ayudantías AYI`;
+
+    const pendientesSec = datos.secciones.filter(s => s.confirma !== "SI" && s.confirma !== "NO").length;
+    const badgeSec = document.getElementById("badge-secciones-pend");
+    badgeSec.textContent = pendientesSec === 0 ? "✓" : `${pendientesSec} pend.`;
+    badgeSec.className = `badge ${pendientesSec === 0 ? "ok" : "info"}`;
+
+    document.getElementById("badge-ayi").textContent = String(datos.ayudantias.length);
+
+    renderizarBarraArchivos();
+    renderizarResumen(datos);
+    inicializarFiltrosSecciones(datos);
+    renderizarTablaSecciones(datos);
+    inicializarControlesHorario(datos);
+    renderizarGrillaHorario(datos);
+    inicializarFiltrosAyudantias(datos);
+    renderizarAyudantias(datos);
+
+    if (!document.querySelector("main .vista.activa")) {
+      activarPestana("secciones");
+    }
+  }
+
+  function renderizarBarraArchivos() {
+    const barra = document.getElementById("barra-archivos");
+    const contenedorTabs = document.getElementById("lista-archivos-tabs");
+    const meta = document.getElementById("meta-archivo-activo");
+
+    if (archivosCargados.length === 0) {
+      barra.classList.remove("visible");
+      return;
+    }
+
+    barra.classList.add("visible");
+    contenedorTabs.innerHTML = archivosCargados.map((arch, idx) => `
+      <button type="button" class="chip-archivo ${idx === indiceArchivoActivo ? "activo" : ""}" data-idx="${idx}" title="${escaparHtml(arch.nombreArchivo)}">
+        📄 ${escaparHtml(arch.sede)} · <span class="mono" style="opacity:0.9">${escaparHtml(arch.nombreArchivo)}</span>
+      </button>
+    `).join("");
+
+    contenedorTabs.querySelectorAll(".chip-archivo").forEach(btn => {
+      btn.addEventListener("click", () => {
+        indiceArchivoActivo = parseInt(btn.dataset.idx, 10);
+        renderizarTodo();
+      });
+    });
+
+    const act = obtenerDatosActivos();
+    meta.textContent = `Planilla base intacta: ${act.nombreArchivo} · Cambios temporales listos para exportar`;
+  }
+
+  // --------------------------------------------------------------------------
+  // PESTAÑA 1: RESUMEN
+  // --------------------------------------------------------------------------
+  function renderizarResumen(datos) {
+    const totalSec = datos.secciones.length;
+    const confSi = datos.secciones.filter(s => s.confirma === "SI").length;
+    const confNo = datos.secciones.filter(s => s.confirma === "NO").length;
+    const pendientes = totalSec - confSi - confNo;
+    const pctAvance = totalSec > 0 ? (((confSi + confNo) / totalSec) * 100).toFixed(1) : "0.0";
+
+    const perfilesListos = datos.secciones.filter(s => s.confirma === "NO" && s.perfilListo === "SI").length;
+    const perfilesPendientes = datos.secciones.filter(s => s.confirma === "NO" && s.perfilListo !== "SI").length;
+    const conSolicitud = datos.secciones.filter(s => Boolean(s.solicitudHorario && s.solicitudHorario.trim())).length;
+
+    const totalAyi = datos.ayudantias.length;
+    const ayiCumplen = datos.ayudantias.filter(a => a.cumple).length;
+    const pctAyi = totalAyi > 0 ? ((ayiCumplen / totalAyi) * 100).toFixed(1) : null;
+
+    document.getElementById("contenedor-kpis").innerHTML = `
+      <div class="kpi" style="--h:215">
+        <div class="etq">Avance Revisión (TEO)</div>
+        <div class="val ${pendientes === 0 ? "bueno" : "aviso"}">${pctAvance}%</div>
+        <div class="sub">${confSi + confNo} revisadas · ${pendientes} pendientes</div>
+      </div>
+      <div class="kpi" style="--h:150">
+        <div class="etq">Docentes Confirmados (SI)</div>
+        <div class="val bueno">${confSi}</div>
+        <div class="sub">De ${totalSec} secciones de cátedra</div>
+      </div>
+      <div class="kpi" style="--h:24">
+        <div class="etq">Reemplazos / Vacantes (NO)</div>
+        <div class="val ${confNo > 0 ? "aviso" : ""}">${confNo}</div>
+        <div class="sub">${perfilesListos} perfil listo (SI) · ${perfilesPendientes} perfil (NO)</div>
+      </div>
+      <div class="kpi" style="--h:265">
+        <div class="etq">Solicitudes Cambio Horario</div>
+        <div class="val">${conSolicitud}</div>
+        <div class="sub">Con justificación registrada</div>
+      </div>
+      <div class="kpi" style="--h:2">
+        <div class="etq">Choques Horarios Activos</div>
+        <div class="val ${datos.choquesDocente.length > 0 ? "malo" : "bueno"}">${datos.choquesDocente.length}</div>
+        <div class="sub">${datos.topesMalla.length} topes de malla detectados</div>
+      </div>
+      <div class="kpi" style="--h:187">
+        <div class="etq">Ayudantías (AYI) Completas</div>
+        <div class="val ${pctAyi === null ? "" : (ayiCumplen === totalAyi ? "bueno" : "aviso")}">
+          ${pctAyi !== null ? `${pctAyi}%` : "N/A"}
+        </div>
+        <div class="sub">${totalAyi > 0 ? `${ayiCumplen} de ${totalAyi} con Nombre y RUT` : "Sin registros AYI"}</div>
+      </div>
+    `;
+
+    // Distribución por Área
+    const conteoArea = new Map();
+    for (const s of datos.secciones) {
+      conteoArea.set(s.area, (conteoArea.get(s.area) || 0) + 1);
+    }
+    const listaAreas = Array.from(conteoArea.entries()).sort((a, b) => b[1] - a[1]);
+    document.getElementById("sub-dist-area").textContent = `${listaAreas.length} áreas activas`;
+    document.getElementById("barras-area").innerHTML = listaAreas.map(([area, cant]) => {
+      const pct = totalSec > 0 ? ((cant / totalSec) * 100).toFixed(1) : 0;
+      const h = obtenerTonoArea(area);
+      return `
+        <div class="barra-fila">
+          <div class="nom" title="${escaparHtml(area)}">${escaparHtml(area)}</div>
+          <div class="pista"><span class="relleno" style="width:${pct}%; --h:${h}"></span></div>
+          <div class="num">${cant} (${pct}%)</div>
+        </div>
+      `;
+    }).join("");
+
+    // Barras de Estado de Gestión
+    document.getElementById("sub-dist-jornada").textContent = `${totalSec} secciones TEO`;
+    const itemsGestion = [
+      { nom: "Confirmados (SI)", cant: confSi, h: 150 },
+      { nom: "No Confirmados (NO)", cant: confNo, h: 24 },
+      { nom: "Pendientes de revisión", cant: pendientes, h: 215 }
+    ];
+    document.getElementById("barras-gestion").innerHTML = itemsGestion.map(it => {
+      const pct = totalSec > 0 ? ((it.cant / totalSec) * 100).toFixed(1) : 0;
+      return `
+        <div class="barra-fila">
+          <div class="nom">${escaparHtml(it.nom)}</div>
+          <div class="pista"><span class="relleno" style="width:${pct}%; --h:${it.h}"></span></div>
+          <div class="num">${it.cant} (${pct}%)</div>
+        </div>
+      `;
+    }).join("");
+
+    const vacantesSinResolver = datos.secciones.filter(s => !s.profPropuesto && s.confirma !== "NO").length;
+    document.getElementById("resumen-auditoria-rapida").innerHTML = `
+      <div style="display:flex; flex-wrap:wrap; gap:8px;">
+        <span class="pildora ${pendientes === 0 ? "ok" : "aviso"}">Pendientes confirmar: ${pendientes}</span>
+        <span class="pildora ${vacantesSinResolver === 0 ? "ok" : "alerta"}">Vacantes sin asignar: ${vacantesSinResolver}</span>
+        <span class="pildora ${perfilesPendientes === 0 ? "ok" : "aviso"}">Nuevos docentes sin perfil (NO): ${perfilesPendientes}</span>
+        <span class="pildora ${datos.choquesDocente.length === 0 ? "ok" : "alerta"}">Choques docentes: ${datos.choquesDocente.length}</span>
+      </div>
+    `;
+
+    // Tabla Cobertura por Cohorte
+    document.getElementById("sub-cobertura").textContent = `Total: ${totalSec} secciones TEO`;
+    const tbodyCob = document.querySelector("#tabla-cobertura tbody");
+    const filasCobHtml = datos.coberturas.map(c => `
+      <tr>
+        <td><b>${c.anio > 0 ? `${c.anio}° Año` : "Sin malla"}</b></td>
+        <td>${c.semestre > 0 ? `Semestre ${c.semestre}` : "Sin malla"}</td>
+        <td><span class="pildora neutro">${escaparHtml(c.jornada)}</span></td>
+        <td class="mono">${c.totalSecciones}</td>
+        <td class="mono">${c.conDocenteEfectivo}</td>
+        <td class="mono">${c.sinDocente > 0 ? `<span class="pildora alerta">${c.sinDocente}</span>` : "0"}</td>
+        <td class="mono"><span class="pildora ok">${c.confirmadasSi}</span></td>
+        <td class="mono">${c.reemplazosNo > 0 ? `<span class="pildora aviso">${c.reemplazosNo}</span>` : "0"}</td>
+        <td class="mono">${c.pendientes > 0 ? `<span class="pildora neutro">${c.pendientes}</span>` : "0"}</td>
+      </tr>
+    `).join("");
+
+    const conEfTotal = datos.secciones.filter(s => Boolean(obtenerDocenteEfectivoSeccion(s).nombre)).length;
+    const sinEfTotal = totalSec - conEfTotal;
+    const filaTotalHtml = `
+      <tr class="fila-total">
+        <td colspan="3">TOTAL CÁTEDRA (TEO)</td>
+        <td class="mono">${totalSec}</td>
+        <td class="mono">${conEfTotal}</td>
+        <td class="mono">${sinEfTotal}</td>
+        <td class="mono">${confSi}</td>
+        <td class="mono">${confNo}</td>
+        <td class="mono">${pendientes}</td>
+      </tr>
+    `;
+    tbodyCob.innerHTML = filasCobHtml + filaTotalHtml;
+  }
+
+  // --------------------------------------------------------------------------
+  // PESTAÑA 2: SECCIONES
+  // --------------------------------------------------------------------------
+  function inicializarFiltrosSecciones(datos) {
+    const selAnio = document.getElementById("filtro-sec-anio");
+    const selArea = document.getElementById("filtro-sec-area");
+    const valAnioPrev = selAnio.value;
+    const valAreaPrev = selArea.value;
+
+    const anios = Array.from(new Set(datos.secciones.map(s => s.anio))).sort((a, b) => a - b);
+    selAnio.innerHTML = `<option value="">Todos los años</option>` +
+      anios.map(a => `<option value="${a}">${a > 0 ? `${a}° Año` : "Sin malla"}</option>`).join("");
+    if (valAnioPrev) selAnio.value = valAnioPrev;
+
+    const areas = Array.from(new Set(datos.secciones.map(s => s.area))).sort();
+    selArea.innerHTML = `<option value="">Todas las áreas</option>` +
+      areas.map(ar => `<option value="${escaparHtml(ar)}">${escaparHtml(ar)}</option>`).join("");
+    if (valAreaPrev) selArea.value = valAreaPrev;
+  }
+
+  function obtenerSeccionesFiltradas(datos) {
+    const q = document.getElementById("filtro-sec-texto").value.trim().toLowerCase();
+    const fAnio = document.getElementById("filtro-sec-anio").value;
+    const fArea = document.getElementById("filtro-sec-area").value;
+    const fJornada = document.getElementById("filtro-sec-jornada").value;
+    const fEstado = document.getElementById("filtro-sec-estado").value;
+
+    return datos.secciones.filter(s => {
+      if (fAnio !== "" && String(s.anio) !== fAnio) return false;
+      if (fArea !== "" && s.area !== fArea) return false;
+      if (fJornada !== "" && s.jornada !== fJornada) return false;
+
+      if (fEstado === "pendiente" && (s.confirma === "SI" || s.confirma === "NO")) return false;
+      if (fEstado === "confirmado_si" && s.confirma !== "SI") return false;
+      if (fEstado === "confirmado_no" && s.confirma !== "NO") return false;
+      if (fEstado === "vacante" && Boolean(s.profPropuesto)) return false;
+      if (fEstado === "con_solicitud" && !Boolean(s.solicitudHorario && s.solicitudHorario.trim())) return false;
+
+      if (q) {
+        const textoBusqueda = `${s.codigo} ${s.asignatura} ${s.seccion} ${s.profPropuesto} ${s.rutPropFormateado} ${s.nuevoDocente} ${s.nuevoRut} ${s.horarioConsolidado} ${s.solicitudHorario}`.toLowerCase();
+        if (!textoBusqueda.includes(q)) return false;
+      }
+      return true;
+    });
+  }
+
+  function renderizarTablaSecciones(datos) {
+    const filtradas = obtenerSeccionesFiltradas(datos);
+    document.getElementById("contador-secciones").textContent =
+      `Mostrando ${filtradas.length} de ${datos.secciones.length} secciones TEO`;
+
+    const tbody = document.querySelector("#tabla-secciones tbody");
+    tbody.innerHTML = filtradas.map(s => {
+      const h = obtenerTonoArea(s.area);
+      let badgeConf = `<span class="pildora neutro">Pendiente</span>`;
+      if (s.confirma === "SI") badgeConf = `<span class="pildora ok">SI</span>`;
+      else if (s.confirma === "NO") badgeConf = `<span class="pildora alerta">NO</span>`;
+
+      let infoNuevoHtml = `<span style="color:var(--texto-3)">—</span>`;
+      if (s.confirma === "NO") {
+        const perfilPill = s.perfilListo === "SI"
+          ? `<span class="pildora ok">Perfil: SI</span>`
+          : (s.perfilListo === "NO" ? `<span class="pildora aviso">Perfil: NO</span>` : `<span class="pildora alerta">Perfil pendiente</span>`);
+        infoNuevoHtml = s.nuevoDocente
+          ? `<div><b>${escaparHtml(s.nuevoDocente)}</b> <span class="mono">(${escaparHtml(normalizarRut(s.nuevoRut).formateado || s.nuevoRut)})</span></div><div style="margin-top:2px;">${perfilPill}</div>`
+          : `<span class="pildora alerta">Falta nuevo docente</span>`;
+      }
+
+      const solHtml = s.solicitudHorario
+        ? `<div>
+             <span class="pildora aviso" title="${escaparHtml(s.solicitudHorario)}">🕒 ${escaparHtml(s.solicitudHorario)}</span>
+           </div>
+           ${s.justificacionHorario ? `<div style="font-size:11px; color:var(--texto-2); margin-top:3px; max-width:260px;" title="${escaparHtml(s.justificacionHorario)}"><b>Justif.:</b> ${escaparHtml(s.justificacionHorario.slice(0, 60))}${s.justificacionHorario.length > 60 ? "…" : ""}</div>` : ""}`
+        : `<span style="color:var(--texto-3)">—</span>`;
+
+      const horarioCeldaHtml = s.solicitudHorario
+        ? `<div><span class="celda-horario-cambiado mono" title="Reemplazará al original en el Excel">${escaparHtml(s.solicitudHorario)}</span></div>
+           <div class="mono" style="font-size:10.5px; color:var(--texto-3); text-decoration:line-through; margin-top:2px;">Orig: ${escaparHtml(s.horarioConsolidado)}</div>`
+        : (s.bloques > 0 ? `<span class="mono">${escaparHtml(s.horarioConsolidado)}</span>` : `<span class="pildora neutro">Sin horario</span>`);
+
+      return `
+        <tr data-sec-id="${escaparHtml(s.id)}">
+          <td class="mono"><b>${escaparHtml(s.codigo)}</b></td>
+          <td>${escaparHtml(s.asignatura)}</td>
+          <td class="mono">${escaparHtml(s.seccion)}</td>
+          <td>${s.anio > 0 ? `${s.anio}° Año · S${s.semestre}` : `<span class="pildora aviso">Sin malla</span>`}</td>
+          <td><span class="etiqueta-area" style="--h:${h}">${escaparHtml(s.area)}</span></td>
+          <td>${horarioCeldaHtml}</td>
+          <td>
+            ${s.profPropuesto
+              ? `<b>${escaparHtml(s.profPropuesto)}</b><div class="mono" style="font-size:11px; color:var(--texto-2);">${escaparHtml(s.rutPropFormateado)}</div>`
+              : `<span class="pildora aviso">Sin profesor propuesto</span>`}
+          </td>
+          <td>${badgeConf}</td>
+          <td>${infoNuevoHtml}</td>
+          <td>${solHtml}</td>
+        </tr>
+      `;
+    }).join("");
+
+    tbody.querySelectorAll("tr").forEach(tr => {
+      tr.addEventListener("click", () => abrirModalGestionSecciones([tr.dataset.secId], "Gestión de Sección"));
+    });
+  }
+
+  // --------------------------------------------------------------------------
+  // PESTAÑA 3: HORARIO (M1-M20)
+  // --------------------------------------------------------------------------
+  function inicializarControlesHorario(datos) {
+    const selPrincipal = document.getElementById("selector-horario-principal");
+    const valorPrevio = selPrincipal.value;
+
+    if (modoHorarioActual === "cohorte") {
+      const opcionesNivel = [
+        { val: "ANIO_1", texto: "1° Año · Semestres 1 y 2 (Año completo)", tieneDatos: datos.secciones.some(s => s.anio === 1) },
+        { val: "SEM_1",  texto: "1° Año · Semestre 1", tieneDatos: datos.secciones.some(s => s.semestre === 1) },
+        { val: "SEM_2",  texto: "1° Año · Semestre 2", tieneDatos: datos.secciones.some(s => s.semestre === 2) },
+        { val: "ANIO_2", texto: "2° Año · Semestres 3 y 4 (Año completo)", tieneDatos: datos.secciones.some(s => s.anio === 2) },
+        { val: "SEM_3",  texto: "2° Año · Semestre 3", tieneDatos: datos.secciones.some(s => s.semestre === 3) },
+        { val: "SEM_4",  texto: "2° Año · Semestre 4", tieneDatos: datos.secciones.some(s => s.semestre === 4) },
+        { val: "ANIO_3", texto: "3° Año · Semestres 5 y 6 (Año completo)", tieneDatos: datos.secciones.some(s => s.anio === 3) },
+        { val: "SEM_5",  texto: "3° Año · Semestre 5", tieneDatos: datos.secciones.some(s => s.semestre === 5) },
+        { val: "SEM_6",  texto: "3° Año · Semestre 6", tieneDatos: datos.secciones.some(s => s.semestre === 6) },
+        { val: "ANIO_4", texto: "4° Año · Semestres 7 y 8 (Año completo)", tieneDatos: datos.secciones.some(s => s.anio === 4) },
+        { val: "SEM_7",  texto: "4° Año · Semestre 7", tieneDatos: datos.secciones.some(s => s.semestre === 7) },
+        { val: "SEM_8",  texto: "4° Año · Semestre 8", tieneDatos: datos.secciones.some(s => s.semestre === 8) },
+        { val: "ANIO_5", texto: "5° Año · Semestres 9 y 10 (Año completo)", tieneDatos: datos.secciones.some(s => s.anio === 5) },
+        { val: "SEM_9",  texto: "5° Año · Semestre 9", tieneDatos: datos.secciones.some(s => s.semestre === 9) },
+        { val: "SEM_10", texto: "5° Año · Semestre 10", tieneDatos: datos.secciones.some(s => s.semestre === 10) }
+      ];
+
+      if (datos.secciones.some(s => s.anio === 0)) {
+        opcionesNivel.push({ val: "ANIO_0", texto: "Asignaturas fuera de malla (Sin malla)", tieneDatos: true });
+      }
+      opcionesNivel.push({ val: "TODOS", texto: "Toda la carrera (1° a 5° Año completo)", tieneDatos: true });
+
+      selPrincipal.innerHTML = opcionesNivel.map(op =>
+        `<option value="${op.val}">${op.texto}${op.tieneDatos ? "" : " (0 sec.)"}</option>`
+      ).join("");
+
+      if (valorPrevio && Array.from(selPrincipal.options).some(o => o.value === valorPrevio)) {
+        selPrincipal.value = valorPrevio;
+      } else {
+        const primerAnioConDatos = opcionesNivel.find(op => op.val.startsWith("ANIO_") && op.tieneDatos);
+        if (primerAnioConDatos) selPrincipal.value = primerAnioConDatos.val;
+      }
+    } else if (modoHorarioActual === "docente") {
+      selPrincipal.innerHTML = datos.docentesEfectivosHorario.map(d =>
+        `<option value="${escaparHtml(d.rutClave)}">${escaparHtml(d.nombre)} (${d.secciones.length} cursos)</option>`
+      ).join("");
+      if (valorPrevio && Array.from(selPrincipal.options).some(o => o.value === valorPrevio)) {
+        selPrincipal.value = valorPrevio;
+      }
+    } else if (modoHorarioActual === "seccion") {
+      selPrincipal.innerHTML = datos.secciones.map(s =>
+        `<option value="${escaparHtml(s.id)}">${escaparHtml(s.codigo)} Sec. ${escaparHtml(s.seccion)} — ${escaparHtml(s.asignatura)}</option>`
+      ).join("");
+      if (valorPrevio && Array.from(selPrincipal.options).some(o => o.value === valorPrevio)) {
+        selPrincipal.value = valorPrevio;
+      }
+    }
+  }
+
+  function obtenerSeccionesFiltradasHorario(datos) {
+    const valorSel = document.getElementById("selector-horario-principal").value;
+    const jornadaFiltro = document.getElementById("selector-horario-jornada").value;
+
+    return datos.secciones.filter(s => {
+      if (jornadaFiltro !== "TODAS" && s.jornada !== jornadaFiltro) return false;
+      if (modoHorarioActual === "cohorte") {
+        if (valorSel === "TODOS") return true;
+        if (valorSel.startsWith("ANIO_")) {
+          const anioBuscado = parseInt(valorSel.split("_")[1], 10);
+          return s.anio === anioBuscado;
+        }
+        if (valorSel.startsWith("SEM_")) {
+          const semBuscado = parseInt(valorSel.split("_")[1], 10);
+          return s.semestre === semBuscado;
+        }
+      } else if (modoHorarioActual === "docente") {
+        const ef = obtenerDocenteEfectivoSeccion(s);
+        return ef.rutClave === valorSel;
+      } else if (modoHorarioActual === "seccion") {
+        return s.id === valorSel;
+      }
+      return true;
+    });
+  }
+
+  function renderizarGrillaHorario(datos) {
+    const seccionesFiltradas = obtenerSeccionesFiltradasHorario(datos);
+    const mapaCeldas = new Map();
+    let totalBloquesPintados = 0;
+
+    for (const sec of seccionesFiltradas) {
+      for (const sl of obtenerSlotsEfectivosSeccion(sec)) {
+        const k = `${sl.dia}_${sl.modulo}`;
+        if (!mapaCeldas.has(k)) mapaCeldas.set(k, []);
+        mapaCeldas.get(k).push(sec);
+        totalBloquesPintados++;
+      }
+    }
+
+    document.getElementById("resumen-vista-horario").textContent =
+      `${seccionesFiltradas.length} secciones en vista · ${totalBloquesPintados} bloques ocupados · Grilla M1–M20`;
+
+    const tbody = document.getElementById("cuerpo-grilla-horario");
+    tbody.innerHTML = BLOQUES_ESTANDAR.map(b => {
+      const celdasDias = DIAS_ORDEN.map(dia => {
+        const k = `${dia}_${b.mod}`;
+        const lista = mapaCeldas.get(k) || [];
+        const ocupada = lista.length > 0;
+
+        let hayTope = false;
+        if (modoHorarioActual === "docente" && lista.length > 1) {
+          hayTope = true;
+        } else if (lista.length > 1) {
+          const vistosCohorte = new Set();
+          const vistosDoc = new Set();
+          for (const sec of lista) {
+            const ef = obtenerDocenteEfectivoSeccion(sec);
+            if (ef.rutClave) {
+              if (vistosDoc.has(ef.rutClave)) hayTope = true;
+              vistosDoc.add(ef.rutClave);
+            }
+            if (sec.semestre > 0) {
+              const cKey = `${sec.semestre}_${sec.jornada}`;
+              if (vistosCohorte.has(cKey)) hayTope = true;
+              vistosCohorte.add(cKey);
+            }
+          }
+        }
+
+        const clasesTd = [
+          dia === "Sa" ? "finde" : "",
+          ocupada ? "ocupada" : "",
+          hayTope ? "tope" : ""
+        ].filter(Boolean).join(" ");
+
+        const bloquesHtml = lista.map(sec => {
+          const h = obtenerTonoArea(sec.area);
+          const ef = obtenerDocenteEfectivoSeccion(sec);
+          const marcaHorario = sec.solicitudHorario ? "🕒 " : "";
+          const docTexto = ef.nombre
+            ? (ef.esReemplazo ? `★ ${ef.nombre}` : ef.nombre)
+            : "Sin docente";
+          return `
+            <button type="button" class="bloque" style="--h:${h}" data-sec-id="${escaparHtml(sec.id)}" title="${escaparHtml(sec.codigo)} Sec. ${escaparHtml(sec.seccion)} · ${escaparHtml(sec.asignatura)} (${escaparHtml(docTexto)})${sec.solicitudHorario ? ` · Cambio horario solicitado: ${escaparHtml(sec.solicitudHorario)}` : ""}">
+              <div class="linea-1">
+                <b>${marcaHorario}${escaparHtml(sec.codigo)}</b>
+                <span class="s">S${escaparHtml(sec.seccion)}</span>
+              </div>
+              <span class="nom-curso">${escaparHtml(sec.asignatura)}</span>
+              <i>${escaparHtml(docTexto)}</i>
+            </button>
+          `;
+        }).join("");
+
+        return `<td class="${clasesTd}"><div class="celda-bloques">${bloquesHtml}</div></td>`;
+      }).join("");
+
+      return `
+        <tr>
+          <td class="hora">
+            <b>M${b.mod}</b>
+            <span>${escaparHtml(b.etq)}</span>
+          </td>
+          ${celdasDias}
+        </tr>
+      `;
+    }).join("");
+
+    tbody.querySelectorAll("button.bloque").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        abrirModalGestionSecciones([btn.dataset.secId], "Gestión de Sección");
+      });
+    });
+  }
+
+  function aplicarZoomHorario(nuevoPorcentaje) {
+    nivelZoomHorario = Math.max(45, Math.min(140, nuevoPorcentaje));
+    const lienzo = document.getElementById("grilla-zoom-lienzo");
+    const etiqueta = document.getElementById("etiqueta-zoom");
+    if (lienzo) lienzo.style.zoom = `${nivelZoomHorario}%`;
+    if (etiqueta) etiqueta.textContent = `${nivelZoomHorario}%`;
+  }
+
+  function exportarHorarioContingenteXlsx() {
+    const datos = obtenerDatosActivos();
+    if (!datos) return;
+
+    const seccionesFiltradas = obtenerSeccionesFiltradasHorario(datos);
+    const selPrincipal = document.getElementById("selector-horario-principal");
+    const textoFiltro = selPrincipal.options[selPrincipal.selectedIndex]?.text || "Filtro";
+
+    const mapaCeldas = new Map();
+    for (const sec of seccionesFiltradas) {
+      for (const sl of sec.slots) {
+        const k = `${sl.dia}_${sl.modulo}`;
+        if (!mapaCeldas.has(k)) mapaCeldas.set(k, []);
+        mapaCeldas.get(k).push(sec);
+      }
+    }
+
+    const matrizData = [
+      ["Módulo", "Bloque Horario", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"]
+    ];
+
+    for (const b of BLOQUES_ESTANDAR) {
+      const fila = [`M${b.mod}`, b.etq];
+      for (const dia of DIAS_ORDEN) {
+        const lista = mapaCeldas.get(`${dia}_${b.mod}`) || [];
+        if (lista.length === 0) {
+          fila.push("");
+        } else {
+          fila.push(lista.map(s => {
+            const ef = obtenerDocenteEfectivoSeccion(s);
+            return `${s.codigo} S${s.seccion} · ${s.asignatura} (${ef.nombre || "Sin docente"})`;
+          }).join("\n"));
+        }
+      }
+      matrizData.push(fila);
+    }
+
+    const blob = generarBlobXlsxNativo([{
+      nombre: "Matriz Horaria",
+      filaEncabezado: 0,
+      anchos: [9, 14, 28, 28, 28, 28, 28, 24],
+      filas: matrizData
+    }]);
+
+    descargarBlobArchivo(blob, `Horario_${limpiarSlugArchivo(datos.sede)}_${limpiarSlugArchivo(textoFiltro)}_${obtenerFechaArchivo()}.xlsx`);
+  }
+
+  // --------------------------------------------------------------------------
+  // PESTAÑA 4: AYUDANTÍAS (AYI)
+  // --------------------------------------------------------------------------
+  // PESTAÑA 4: DOCENTES (SIN BLOQUES SEMANALES + COLUMNA CONFIRMA DOCENTE A LA DERECHA DE ESTADO)
+  // --------------------------------------------------------------------------
+  function inicializarFiltrosDocentes(datos) {
+    const selArea = document.getElementById("filtro-doc-area");
+    const prev = selArea.value;
+    const areas = Array.from(new Set(datos.secciones.map(s => s.area))).sort();
+    selArea.innerHTML = `<option value="">Todas las áreas</option>` +
+      areas.map(a => `<option value="${escaparHtml(a)}">${escaparHtml(a)}</option>`).join("");
+    if (prev) selArea.value = prev;
+  }
+
+  function obtenerDocentesFiltrados(datos) {
+    const q = document.getElementById("filtro-doc-texto").value.trim().toLowerCase();
+    const fArea = document.getElementById("filtro-doc-area").value;
+    const fEstado = document.getElementById("filtro-doc-estado").value;
+
+    return datos.docentes.filter(d => {
+      if (fArea && !d.areasLista.includes(fArea)) return false;
+
+      if (fEstado === "pendientes" && !d.secciones.some(s => s.confirma !== "SI" && s.confirma !== "NO")) return false;
+      if (fEstado === "confirmados_si" && !(d.secciones.length > 0 && d.secciones.every(s => s.confirma === "SI"))) return false;
+      if (fEstado === "con_no" && !d.secciones.some(s => s.confirma === "NO")) return false;
+      if (fEstado === "vacantes" && !d.esVacante) return false;
+      if (fEstado === "con_solicitud" && !d.secciones.some(s => Boolean(s.solicitudHorario && s.solicitudHorario.trim()))) return false;
+
+      if (q) {
+        const asigs = d.secciones.map(s => `${s.codigo} ${s.asignatura} ${s.seccion} ${s.nuevoDocente} ${s.nuevoRut}`).join(" ");
+        const texto = `${d.nombre} ${d.rutFormateado} ${d.grado} ${asigs}`.toLowerCase();
+        if (!texto.includes(q)) return false;
+      }
+      return true;
+    });
+  }
+
+  function renderizarTablaDocentes(datos) {
+    const filtrados = obtenerDocentesFiltrados(datos);
+    document.getElementById("contador-docentes").textContent =
+      `Mostrando ${filtrados.length} de ${datos.docentes.length} registros docentes / vacantes`;
+
+    const tbody = document.querySelector("#tabla-docentes tbody");
+    tbody.innerHTML = filtrados.map(d => {
+      const chipsAreas = d.areasLista.map(ar =>
+        `<span class="etiqueta-area" style="--h:${obtenerTonoArea(ar)}">${escaparHtml(ar)}</span>`
+      ).join(" ");
+
+      const listaCursos = d.secciones.map(s => {
+        let marcaSec = "";
+        if (s.confirma === "SI") marcaSec = `<span style="color:var(--ok); font-weight:700;">[SI]</span>`;
+        else if (s.confirma === "NO") marcaSec = `<span style="color:var(--alerta); font-weight:700;">[NO]</span>`;
+        else marcaSec = `<span style="color:var(--texto-3);">[Pend.]</span>`;
+
+        const detalleSolDoc = s.solicitudHorario
+          ? `<div style="font-size:11px; color:var(--aviso); margin-left:10px;">
+               🕒 Solicita: <span class="mono"><b>${escaparHtml(s.solicitudHorario)}</b></span>
+               ${s.justificacionHorario ? ` — <i>"${escaparHtml(s.justificacionHorario)}"</i>` : ""}
+             </div>`
+          : "";
+
+        return `<div style="margin-bottom:3px;">
+          <span class="mono"><b>${escaparHtml(s.codigo)}</b>-S${escaparHtml(s.seccion)}</span> · ${escaparHtml(s.asignatura)} ${marcaSec}
+          ${detalleSolDoc}
+        </div>`;
+      }).join("");
+
+      // Columna Estado (alertas académicas / horarios / solicitudes)
+      const badgesEstado = [];
+      if (d.esVacante) badgesEstado.push(`<span class="pildora aviso">Vacante sin docente</span>`);
+      if (d.choques.length > 0) badgesEstado.push(`<span class="pildora alerta">Choque (${d.choques.length})</span>`);
+      if (!d.esVacante && d.numCursos > 2) badgesEstado.push(`<span class="pildora aviso">&gt; 2 cursos (${d.numCursos})</span>`);
+      const cantSolicitudes = d.secciones.filter(s => Boolean(s.solicitudHorario && s.solicitudHorario.trim())).length;
+      if (cantSolicitudes > 0) badgesEstado.push(`<span class="pildora neutro">🕒 ${cantSolicitudes} solicitud(es)</span>`);
+      if (badgesEstado.length === 0) badgesEstado.push(`<span class="pildora ok">Sin observaciones</span>`);
+
+      // Columna Confirma Docente (a la derecha de Estado)
+      const totalS = d.secciones.length;
+      const cantSi = d.secciones.filter(s => s.confirma === "SI").length;
+      const cantNo = d.secciones.filter(s => s.confirma === "NO").length;
+      const cantPend = totalS - cantSi - cantNo;
+
+      let celdaConfirmaHtml = "";
+      if (cantPend === totalS) {
+        celdaConfirmaHtml = `<span class="pildora neutro">Pendiente (Clic para confirmar)</span>`;
+      } else if (cantSi === totalS) {
+        celdaConfirmaHtml = `<span class="pildora ok">SI (${cantSi}/${totalS})</span>`;
+      } else if (cantNo === totalS) {
+        const reemplazos = d.secciones.filter(s => s.nuevoDocente).map(s =>
+          `<div style="font-size:11px; margin-top:3px;">→ <b>${escaparHtml(s.nuevoDocente)}</b> (${escaparHtml(normalizarRut(s.nuevoRut).formateado || s.nuevoRut)}) · Perfil: <b>${escaparHtml(s.perfilListo || "Pend.")}</b></div>`
+        ).join("");
+        celdaConfirmaHtml = `<span class="pildora alerta">NO (${cantNo}/${totalS})</span>${reemplazos}`;
+      } else {
+        const detalleMix = [];
+        if (cantSi > 0) detalleMix.push(`<span class="pildora ok">SI: ${cantSi}</span>`);
+        if (cantNo > 0) detalleMix.push(`<span class="pildora alerta">NO: ${cantNo}</span>`);
+        if (cantPend > 0) detalleMix.push(`<span class="pildora neutro">Pend: ${cantPend}</span>`);
+        const reemplazos = d.secciones.filter(s => s.confirma === "NO" && s.nuevoDocente).map(s =>
+          `<div style="font-size:11px; margin-top:3px;">S${escaparHtml(s.seccion)} → <b>${escaparHtml(s.nuevoDocente)}</b> (Perfil: ${escaparHtml(s.perfilListo || "Pend.")})</div>`
+        ).join("");
+        celdaConfirmaHtml = `<div style="display:flex; gap:4px; flex-wrap:wrap;">${detalleMix.join("")}</div>${reemplazos}`;
+      }
+
+      return `
+        <tr data-doc-rut="${escaparHtml(d.rutClave)}">
+          <td>
+            ${d.esVacante
+              ? `<span class="pildora aviso">SIN PROFESOR PROPUESTO</span>`
+              : `<b>${escaparHtml(d.nombre)}</b>`}
+          </td>
+          <td class="mono">${escaparHtml(d.rutFormateado)}</td>
+          <td>${escaparHtml(d.grado || "—")}</td>
+          <td>${chipsAreas}</td>
+          <td class="mono"><b>${d.numCursos}</b></td>
+          <td>${listaCursos}</td>
+          <td><div style="display:flex; gap:4px; flex-wrap:wrap;">${badgesEstado.join("")}</div></td>
+          <td>${celdaConfirmaHtml}</td>
+        </tr>
+      `;
+    }).join("");
+
+    tbody.querySelectorAll("tr").forEach(tr => {
+      tr.addEventListener("click", () => {
+        const doc = datos.docentes.find(item => item.rutClave === tr.dataset.docRut);
+        if (!doc) return;
+        const idsSec = doc.secciones.map(s => s.id);
+        const titulo = doc.esVacante
+          ? "Completar Sección Vacante (Sin Profesor Propuesto)"
+          : `${doc.nombre} (${doc.rutFormateado})`;
+        abrirModalGestionSecciones(idsSec, titulo);
+      });
+    });
+  }
+
+  // --------------------------------------------------------------------------
+  // PESTAÑA 5: AYUDANTÍAS (AYI)
+  // --------------------------------------------------------------------------
+  function inicializarFiltrosAyudantias(datos) {
+    const selArea = document.getElementById("filtro-ayi-area");
+    if (!selArea) return;
+    const prev = selArea.value;
+    const areas = Array.from(new Set((datos.ayudantias || []).map(a => a.area))).sort();
+    selArea.innerHTML = `<option value="">Todas las áreas</option>` +
+      areas.map(a => `<option value="${escaparHtml(a)}">${escaparHtml(a)}</option>`).join("");
+    if (prev) selArea.value = prev;
+  }
+
+  function obtenerAyudantiasFiltradas(datos) {
+    const listaAyi = datos.ayudantias || [];
+    const q = (document.getElementById("filtro-ayi-texto")?.value || "").trim().toLowerCase();
+    const fArea = document.getElementById("filtro-ayi-area")?.value || "";
+    const fEstado = document.getElementById("filtro-ayi-estado")?.value || "";
+
+    return listaAyi.filter(a => {
+      if (fArea && a.area !== fArea) return false;
+      if (fEstado === "completo" && !a.cumple) return false;
+      if (fEstado === "incompleto" && a.cumple) return false;
+      if (fEstado === "falta_nombre" && a.tieneNombre) return false;
+      if (fEstado === "falta_rut" && !(a.tieneNombre && !a.tieneRut)) return false;
+      if (q) {
+        const txt = `${a.codigo} ${a.asignatura} ${a.seccion} ${a.profPropuesto} ${a.nuevoDocente} ${a.rutPropFormateado} ${a.area}`.toLowerCase();
+        if (!txt.includes(q)) return false;
+      }
+      return true;
+    });
+  }
+
+  function renderizarAyudantias(datos) {
+    const listaAyi = datos.ayudantias || [];
+    const totalAyi = listaAyi.length;
+    const cumplen = listaAyi.filter(a => a.cumple).length;
+    const sinNombre = listaAyi.filter(a => !a.tieneNombre).length;
+    const sinRut = listaAyi.filter(a => a.tieneNombre && !a.tieneRut).length;
+    const pctCumpl = totalAyi > 0 ? ((cumplen / totalAyi) * 100).toFixed(1) : "0.0";
+
+    const kpisCont = document.getElementById("contenedor-kpis-ayi");
+    if (kpisCont) {
+      kpisCont.innerHTML = `
+        <div class="kpi" style="--h:187">
+          <div class="etq">Total Secciones AYI</div>
+          <div class="val">${totalAyi}</div>
+          <div class="sub">No requieren horario programado</div>
+        </div>
+        <div class="kpi" style="--h:150">
+          <div class="etq">% Cumplimiento (Nombre + RUT)</div>
+          <div class="val ${totalAyi === 0 ? "" : (cumplen === totalAyi ? "bueno" : "aviso")}">${totalAyi > 0 ? `${pctCumpl}%` : "N/A"}</div>
+          <div class="sub">${cumplen} completas · ${totalAyi - cumplen} incompletas</div>
+        </div>
+        <div class="kpi" style="--h:2">
+          <div class="etq">Sin Nombre de Ayudante</div>
+          <div class="val ${sinNombre > 0 ? "malo" : "bueno"}">${sinNombre}</div>
+          <div class="sub">Registros AYI sin ayudante declarado</div>
+        </div>
+        <div class="kpi" style="--h:45">
+          <div class="etq">Con Nombre pero Sin RUT</div>
+          <div class="val ${sinRut > 0 ? "aviso" : "bueno"}">${sinRut}</div>
+          <div class="sub">Falta normalizar/ingresar RUT</div>
+        </div>
+      `;
+    }
+
+    const mapaAreaAyi = new Map();
+    for (const a of listaAyi) {
+      if (!mapaAreaAyi.has(a.area)) mapaAreaAyi.set(a.area, { total: 0, cumplen: 0 });
+      const item = mapaAreaAyi.get(a.area);
+      item.total++;
+      if (a.cumple) item.cumplen++;
+    }
+    const listaAreasAyi = Array.from(mapaAreaAyi.entries()).sort((a, b) => b[1].total - a[1].total);
+    document.getElementById("sub-ayi-area").textContent = `${listaAreasAyi.length} áreas con AYI`;
+    document.getElementById("barras-ayi-area").innerHTML = listaAreasAyi.length === 0
+      ? `<div class="item-alerta"><span class="pildora neutro">La planilla cargada no contiene registros AYI</span></div>`
+      : listaAreasAyi.map(([area, obj]) => {
+          const pct = obj.total > 0 ? ((obj.cumplen / obj.total) * 100).toFixed(1) : "0.0";
+          const h = obtenerTonoArea(area);
+          return `
+            <div class="barra-fila">
+              <div class="nom" title="${escaparHtml(area)}">${escaparHtml(area)}</div>
+              <div class="pista"><span class="relleno" style="width:${pct}%; --h:${h}"></span></div>
+              <div class="num">${obj.cumplen}/${obj.total} (${pct}%)</div>
+            </div>
+          `;
+        }).join("");
+
+    const alertasAyi = [];
+    for (const a of listaAyi) {
+      if (!a.tieneNombre) {
+        alertasAyi.push({
+          gravedad: "critica",
+          titulo: `Sin nombre de ayudante · ${a.codigo} Sec. ${a.seccion}`,
+          detalle: `${a.asignatura} (Fila ${a.filaExcelTexto}) no declara nombre ni RUT de ayudante.`
+        });
+      } else if (!a.tieneRut) {
+        alertasAyi.push({
+          gravedad: "advertencia",
+          titulo: `Falta RUT de ayudante · ${a.codigo} Sec. ${a.seccion}`,
+          detalle: `Ayudante "${a.profPropuesto || a.nuevoDocente}" en ${a.asignatura} (Fila ${a.filaExcelTexto}) no registra RUT válido.`
+        });
+      }
+    }
+
+    document.getElementById("sub-ayi-alertas").textContent = `${alertasAyi.length} observaciones`;
+    const contAlertasAyi = document.getElementById("lista-alertas-ayi");
+    if (totalAyi === 0) {
+      contAlertasAyi.innerHTML = `<div class="item-alerta"><span class="pildora neutro">Sin ayudantías (AYI) registradas</span></div>`;
+    } else if (alertasAyi.length === 0) {
+      contAlertasAyi.innerHTML = `<div class="item-alerta exito"><span class="pildora ok">100% de las ayudantías (AYI) cuentan con Nombre y RUT válidos</span></div>`;
+    } else {
+      contAlertasAyi.innerHTML = alertasAyi.map(al => `
+        <div class="item-alerta ${al.gravedad}">
+          <div>
+            <b>${escaparHtml(al.titulo)}</b>
+            <div style="font-size:12px; margin-top:2px;">${escaparHtml(al.detalle)}</div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    const filtradas = obtenerAyudantiasFiltradas(datos);
+    document.getElementById("contador-ayi").textContent =
+      `Mostrando ${filtradas.length} de ${totalAyi} ayudantías (AYI)`;
+
+    const tbody = document.querySelector("#tabla-ayi tbody");
+    if (filtradas.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="10" style="text-align:center; padding:22px; color:var(--texto-3);">No hay ayudantías (AYI) que coincidan con los filtros seleccionados.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = filtradas.map(a => {
+      const h = obtenerTonoArea(a.area);
+      let badgeCumpl = `<span class="pildora ok">Cumple (Nombre + RUT)</span>`;
+      if (!a.tieneNombre) badgeCumpl = `<span class="pildora alerta">Sin Nombre ni RUT</span>`;
+      else if (!a.tieneRut) badgeCumpl = `<span class="pildora aviso">Falta RUT</span>`;
+
+      const confInfo = a.confirma
+        ? `<span class="pildora ${a.confirma === "SI" ? "ok" : "alerta"}">${a.confirma}</span> ${a.nuevoDocente ? `→ <b>${escaparHtml(a.nuevoDocente)}</b>` : ""}`
+        : `<span style="color:var(--texto-3)">Pendiente</span>`;
+
+      return `
+        <tr data-ayi-id="${escaparHtml(a.id)}">
+          <td class="mono"><b>${escaparHtml(a.codigo)}</b></td>
+          <td>${escaparHtml(a.asignatura)}</td>
+          <td class="mono">${escaparHtml(a.seccion)}</td>
+          <td>${a.anio > 0 ? `${a.anio}° Año · S${a.semestre}` : `<span class="pildora aviso">Sin malla</span>`}</td>
+          <td><span class="etiqueta-area" style="--h:${h}">${escaparHtml(a.area)}</span></td>
+          <td>${a.profPropuesto ? `<b>${escaparHtml(a.profPropuesto)}</b>` : `<span class="pildora alerta">Sin nombre</span>`}</td>
+          <td class="mono">${a.rutPropFormateado ? escaparHtml(a.rutPropFormateado) : `<span class="pildora aviso">Sin RUT</span>`}</td>
+          <td>${confInfo}</td>
+          <td>${badgeCumpl}</td>
+          <td class="mono" style="color:var(--texto-3)">${escaparHtml(a.filaExcelTexto)}</td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  // ============================================================================
+  // 6. VENTANA / PANEL DE GESTIÓN POR SECCIÓN (SI / NO, NUEVO DOCENTE Y SOLICITUDES)
+  // ============================================================================
+  function abrirModalGestionSecciones(idsSecciones, tituloContexto) {
+    const datos = obtenerDatosActivos();
+    if (!datos) return;
+
+    const listaSecciones = idsSecciones
+      .map(id => datos.secciones.find(s => s.id === id))
+      .filter(Boolean);
+
+    if (listaSecciones.length === 0) return;
+
+    document.getElementById("panel-subtitulo").textContent =
+      `Sede ${datos.sede} · ${listaSecciones.length} sección(es) para pronunciamiento`;
+    document.getElementById("panel-titulo").textContent = tituloContexto;
+
+    const cuerpo = document.getElementById("panel-cuerpo");
+    cuerpo.innerHTML = `
+      <div style="font-size:12.5px; color:var(--texto-2); margin-bottom:14px; background:var(--superficie-2); padding:10px 12px; border-radius:8px; border:1px solid var(--borde);">
+        Pronúnciate de forma independiente por cada sección (<b>SI</b> o <b>NO</b>).
+        Si seleccionas <b>NO</b> (o completas una vacante), es obligatorio ingresar el <b>Nombre del Nuevo Docente</b>, su <b>RUT</b> y si tiene su <b>Perfil Listo (SI / NO)</b>.
+      </div>
+      <div id="contenedor-tarjetas-gestion">
+        ${listaSecciones.map((sec, idx) => renderizarTarjetaGestionSeccionHtml(datos, sec, idx)).join("")}
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:16px; padding-top:14px; border-top:1px solid var(--borde); position:sticky; bottom:0; background:var(--superficie); z-index:5;">
+        <button type="button" class="btn-accion" id="btn-cancelar-gestion">Cancelar</button>
+        <button type="button" class="btn-accion primario" id="btn-guardar-gestion-panel">
+          ✓ Guardar Cambios
+        </button>
+      </div>
+    `;
+
+    // Vincular eventos interactivos de cada tarjeta
+    listaSecciones.forEach(sec => {
+      const card = cuerpo.querySelector(`[data-card-sec="${CSS.escape(sec.id)}"]`);
+      if (!card) return;
+
+      const tieneProp = Boolean(sec.profPropuesto);
+      const btnSi = card.querySelector(`[data-btn-decision="SI"]`);
+      const btnNo = card.querySelector(`[data-btn-decision="NO"]`);
+      const cajaReemplazo = card.querySelector(".caja-reemplazo");
+      const inputNombre = card.querySelector(".inp-nuevo-nombre");
+      const inputRut = card.querySelector(".inp-nuevo-rut");
+      const selectPerfil = card.querySelector(".sel-perfil-listo");
+      const estadoRutSpan = card.querySelector(".estado-rut-validacion");
+
+      const inputSolHorario = card.querySelector(".inp-solicitud-horario");
+      const bloqueJustificacion = card.querySelector(".bloque-justificacion-horario");
+      const inputJustificacion = card.querySelector(".inp-justificacion-horario");
+      const selDia = card.querySelector(".sel-bloque-dia");
+      const selModIni = card.querySelector(".sel-bloque-ini");
+      const selModFin = card.querySelector(".sel-bloque-fin");
+      const btnAgregarBloque = card.querySelector(".btn-agregar-bloque");
+      const btnLimpiarSol = card.querySelector(".btn-limpiar-solicitud");
+      const cajaAlertaHor = card.querySelector(".alerta-compatibilidad-horario");
+
+      const actualizarVistaDecision = (nuevaDecision) => {
+        card.dataset.decisionActual = nuevaDecision;
+        card.classList.remove("confirmado-si", "confirmado-no", "pendiente");
+        if (nuevaDecision === "SI") {
+          card.classList.add("confirmado-si");
+          btnSi.classList.add("activo-si");
+          btnNo.classList.remove("activo-no");
+          cajaReemplazo.style.display = "none";
+        } else if (nuevaDecision === "NO") {
+          card.classList.add("confirmado-no");
+          btnNo.classList.add("activo-no");
+          btnSi.classList.remove("activo-si");
+          cajaReemplazo.style.display = "block";
+        } else {
+          card.classList.add("pendiente");
+          btnSi.classList.remove("activo-si");
+          btnNo.classList.remove("activo-no");
+          cajaReemplazo.style.display = "none";
+        }
+        recalcularAlertaHorarioEnVivo();
+      };
+
+      const validarRutEnVivo = () => {
+        const val = inputRut.value.trim();
+        if (!val) {
+          estadoRutSpan.innerHTML = "";
+          return;
+        }
+        const rn = normalizarRut(val);
+        if (!rn.clave) {
+          estadoRutSpan.innerHTML = `<span style="color:var(--alerta);">Formato RUT inválido</span>`;
+        } else if (rn.dvValido) {
+          estadoRutSpan.innerHTML = `<span style="color:var(--ok);">✓ RUT válido (${rn.formateado})</span>`;
+        } else {
+          estadoRutSpan.innerHTML = `<span style="color:var(--aviso);">⚠ Dígito verificador no coincide (${rn.formateado})</span>`;
+        }
+      };
+
+      const recalcularAlertaHorarioEnVivo = () => {
+        const hayTextoSol = Boolean(inputSolHorario.value.trim());
+        if (bloqueJustificacion) {
+          bloqueJustificacion.style.display = hayTextoSol ? "block" : "none";
+        }
+
+        const decActual = card.dataset.decisionActual || "";
+        const evalRes = evaluarCompatibilidadSolicitudHorario(
+          datos,
+          sec,
+          inputSolHorario.value,
+          decActual,
+          inputNombre ? inputNombre.value : "",
+          inputRut ? inputRut.value : ""
+        );
+
+        if (!evalRes.hayCambio) {
+          cajaAlertaHor.style.display = "none";
+          cajaAlertaHor.innerHTML = "";
+          return;
+        }
+
+        if (!evalRes.validoSintaxis) {
+          cajaAlertaHor.style.display = "block";
+          cajaAlertaHor.className = "item-alerta critica alerta-compatibilidad-horario";
+          cajaAlertaHor.innerHTML = `<div style="font-size:12px;"><b>Formato de horario no reconocido:</b> ${escaparHtml(evalRes.advertencias.join(" "))}</div>`;
+          return;
+        }
+
+        if (evalRes.advertencias.length > 0) {
+          cajaAlertaHor.style.display = "block";
+          cajaAlertaHor.className = "item-alerta advertencia alerta-compatibilidad-horario";
+          cajaAlertaHor.innerHTML = `
+            <div style="font-size:12px;">
+              <b>⚠️ Incompatibilidad detectada (puedes enviar la solicitud de todas formas):</b>
+              <ul style="margin:4px 0 0; padding-left:18px;">
+                ${evalRes.advertencias.map(w => `<li>${escaparHtml(w)}</li>`).join("")}
+              </ul>
+            </div>
+          `;
+        } else {
+          cajaAlertaHor.style.display = "block";
+          cajaAlertaHor.className = "item-alerta exito alerta-compatibilidad-horario";
+          cajaAlertaHor.innerHTML = `<div style="font-size:12px;"><b>✓ Horario compatible:</b> ${escaparHtml(evalRes.textoNormalizado)} no presenta choques docentes ni topes de malla.</div>`;
+        }
+      };
+
+      if (btnSi && tieneProp) {
+        btnSi.addEventListener("click", () => actualizarVistaDecision("SI"));
+      }
+      if (btnNo) {
+        btnNo.addEventListener("click", () => actualizarVistaDecision("NO"));
+      }
+      if (inputRut) {
+        inputRut.addEventListener("input", () => {
+          validarRutEnVivo();
+          recalcularAlertaHorarioEnVivo();
+        });
+        validarRutEnVivo();
+      }
+      if (inputNombre) {
+        inputNombre.addEventListener("input", recalcularAlertaHorarioEnVivo);
+      }
+
+      btnAgregarBloque.addEventListener("click", () => {
+        const d = selDia.value;
+        const m1 = parseInt(selModIni.value, 10);
+        const m2 = parseInt(selModFin.value, 10);
+        const ini = Math.min(m1, m2);
+        const fin = Math.max(m1, m2);
+        const nuevoTramo = ini === fin ? `.${d} ${ini}` : `.${d} ${ini}-${fin}`;
+        const actual = inputSolHorario.value.trim();
+        inputSolHorario.value = actual ? `${actual}, ${nuevoTramo}` : nuevoTramo;
+        recalcularAlertaHorarioEnVivo();
+      });
+
+      btnLimpiarSol.addEventListener("click", () => {
+        inputSolHorario.value = "";
+        if (inputJustificacion) inputJustificacion.value = "";
+        recalcularAlertaHorarioEnVivo();
+      });
+
+      card.querySelectorAll(".chip-motivo").forEach(chip => {
+        chip.addEventListener("click", () => {
+          if (!inputJustificacion) return;
+          const textoChip = chip.dataset.motivo || "";
+          const actual = inputJustificacion.value.trim();
+          inputJustificacion.value = actual ? `${actual}. ${textoChip}` : textoChip;
+          inputJustificacion.focus();
+        });
+      });
+
+      inputSolHorario.addEventListener("input", recalcularAlertaHorarioEnVivo);
+      recalcularAlertaHorarioEnVivo();
+    });
+
+    document.getElementById("btn-cancelar-gestion").addEventListener("click", cerrarPanel);
+    document.getElementById("btn-guardar-gestion-panel").addEventListener("click", () => {
+      guardarCambiosDesdePanel(datos, listaSecciones);
+    });
+
+    document.getElementById("velo-panel").classList.add("abierto");
+    document.getElementById("panel").classList.add("abierto");
+  }
+
+  function renderizarTarjetaGestionSeccionHtml(datos, sec) {
+    const h = obtenerTonoArea(sec.area);
+    const tieneProp = Boolean(sec.profPropuesto);
+    // Si es vacante sin profesor propuesto, la única opción válida es NO (completar nuevo docente)
+    const decisionInicial = tieneProp ? (sec.confirma || "") : (sec.confirma || "NO");
+    const claseEstado = decisionInicial === "SI"
+      ? "confirmado-si"
+      : (decisionInicial === "NO" ? "confirmado-no" : "pendiente");
+
+    const opcionesModulosHtml = BLOQUES_ESTANDAR
+      .filter(b => b.mod !== 13 && b.mod !== 14)
+      .map(b => `<option value="${b.mod}">M${b.mod} (${b.etq})</option>`)
+      .join("");
+
+    return `
+      <div class="tarjeta-gestion-seccion ${claseEstado}" data-card-sec="${escaparHtml(sec.id)}" data-decision-actual="${escaparHtml(decisionInicial)}">
+        <div class="cabecera-tarjeta-sec">
+          <div>
+            <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+              <span class="mono" style="font-size:13px;"><b>${escaparHtml(sec.codigo)}</b> · Sección <b>${escaparHtml(sec.seccion)}</b></span>
+              <span class="etiqueta-area" style="--h:${h}">${escaparHtml(sec.area)}</span>
+              <span class="pildora neutro">${escaparHtml(sec.jornada)}</span>
+            </div>
+            <div style="font-weight:700; font-size:13.5px; margin-top:3px;">${escaparHtml(sec.asignatura)}</div>
+            <div style="font-size:12px; color:var(--texto-2); margin-top:2px;">
+              Horario actual: <span class="mono"><b>${escaparHtml(sec.horarioConsolidado)}</b></span>
+              ${sec.profPropuesto ? ` · Propuesto: <b>${escaparHtml(sec.profPropuesto)}</b>` : ` · <span class="pildora aviso">Sin profesor propuesto</span>`}
+            </div>
+            ${sec.solicitudHorario ? `
+              <div class="resumen-solicitud-ficha">
+                <div><b>🕒 Solicitud de cambio de horario registrada:</b> <span class="mono">${escaparHtml(sec.solicitudHorario)}</span> ${sec.fechaSolicitudHorario ? `<span style="opacity:0.85;">(${escaparHtml(sec.fechaSolicitudHorario)})</span>` : ""}</div>
+                <div style="margin-top:3px;"><b>Justificación de Dirección:</b> ${escaparHtml(sec.justificacionHorario || "(Sin justificación registrada)")}</div>
+              </div>
+            ` : ""}
+          </div>
+        </div>
+
+        <div style="font-size:12px; font-weight:700; color:var(--texto-2);">¿Confirma al docente para esta sección?</div>
+        <div class="grupo-decision-radio">
+          <div class="opcion-radio-card ${decisionInicial === "SI" ? "activo-si" : ""} ${!tieneProp ? "disabled" : ""}"
+               data-btn-decision="SI"
+               title="${tieneProp ? "Confirmar al profesor propuesto" : "No aplica SI porque la sección no tiene profesor propuesto"}">
+            ✓ SI · Confirmar docente
+          </div>
+          <div class="opcion-radio-card ${decisionInicial === "NO" ? "activo-no" : ""}" data-btn-decision="NO">
+            ✕ NO · Reemplazar / Ingresar nuevo docente
+          </div>
+        </div>
+
+        <div class="caja-reemplazo" style="display:${decisionInicial === "NO" ? "block" : "none"};">
+          <div style="font-size:12px; font-weight:700; color:var(--alerta); margin-bottom:8px;">
+            Datos obligatorios del Nuevo Docente (CONFIRMA = NO):
+          </div>
+          <div class="campo-form">
+            <label>Nombre Nuevo Docente *</label>
+            <input type="text" class="inp-nuevo-nombre" placeholder="Ej: APELLIDO PATERNO APELLIDO MATERNO NOMBRES" value="${escaparHtml(sec.nuevoDocente || "")}">
+          </div>
+          <div class="fila-dos-campos">
+            <div class="campo-form" style="margin-bottom:0;">
+              <label>RUT Nuevo Docente *</label>
+              <input type="text" class="inp-nuevo-rut mono" placeholder="Ej: 18105578-2" value="${escaparHtml(sec.nuevoRut || "")}">
+              <div class="estado-rut-validacion" style="font-size:11px; margin-top:3px;"></div>
+            </div>
+            <div class="campo-form" style="margin-bottom:0;">
+              <label>¿Perfil Listo en Sistema? *</label>
+              <select class="sel-perfil-listo">
+                <option value="">-- Seleccionar SI / NO --</option>
+                <option value="SI" ${sec.perfilListo === "SI" ? "selected" : ""}>SI (Perfil listo)</option>
+                <option value="NO" ${sec.perfilListo === "NO" ? "selected" : ""}>NO (Perfil pendiente)</option>
+              </select>
+            </div>
+          </div>
+          <div class="error-validacion-tarjeta" style="color:var(--alerta); font-size:11.5px; font-weight:700; margin-top:8px; display:none;"></div>
+        </div>
+
+        <div class="caja-solicitud-horario">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+            <label style="font-size:12px; font-weight:700; color:var(--texto);">
+              🕒 Solicitud de Cambio de Horario (Opcional)
+            </label>
+            <button type="button" class="enlace-ficha btn-limpiar-solicitud" style="font-size:11px; padding:2px 7px;">Limpiar</button>
+          </div>
+          <div style="font-size:11.5px; color:var(--texto-2); margin-top:2px;">
+            Horario actual: <span class="mono">${escaparHtml(sec.horarioConsolidado)}</span>. Si solicitas un cambio, deberás ingresar obligatoriamente su justificación.
+          </div>
+
+          <div class="constructor-bloques-mini">
+            <select class="sel-bloque-dia">
+              ${DIAS_ORDEN.map(d => `<option value="${d}">${DIAS_NOMBRE[d]} (.${d})</option>`).join("")}
+            </select>
+            <select class="sel-bloque-ini">${opcionesModulosHtml}</select>
+            <span>a</span>
+            <select class="sel-bloque-fin">${opcionesModulosHtml}</select>
+            <button type="button" class="btn-accion secundario btn-agregar-bloque" style="padding:4px 9px; font-size:11.5px;">
+              + Agregar bloque
+            </button>
+          </div>
+
+          <div class="campo-form" style="margin-top:8px; margin-bottom:0;">
+            <input type="text" class="inp-solicitud-horario mono" placeholder="Ej: .Lu 10-11, .Vi 10-11 (o deja vacío si no solicitas cambio)" value="${escaparHtml(sec.solicitudHorario || "")}">
+          </div>
+
+          <div class="bloque-justificacion-horario" style="display:${sec.solicitudHorario ? "block" : "none"}; margin-top:10px; padding-top:10px; border-top:1px solid var(--borde);">
+            <div class="campo-form" style="margin-bottom:4px;">
+              <label style="color:var(--acento);">Justificación de la solicitud de cambio de horario *</label>
+              <textarea rows="2" class="inp-justificacion-horario" placeholder="Indique obligatoriamente el motivo académico o de disponibilidad horaria que justifica este cambio...">${escaparHtml(sec.justificacionHorario || "")}</textarea>
+            </div>
+            <div class="chips-justificacion-rapida">
+              <button type="button" class="chip-motivo" data-motivo="Disponibilidad horaria informada por el docente">+ Disponibilidad docente</button>
+              <button type="button" class="chip-motivo" data-motivo="Evitar tope horario en la cohorte">+ Evitar tope horario</button>
+              <button type="button" class="chip-motivo" data-motivo="Reorganización académica solicitada por Dirección de Carrera">+ Ajuste Dirección de Carrera</button>
+            </div>
+            <div class="error-justificacion-tarjeta" style="color:var(--alerta); font-size:11.5px; font-weight:700; margin-top:6px; display:none;"></div>
+          </div>
+
+          <div class="alerta-compatibilidad-horario" style="display:none; margin-top:8px;"></div>
+        </div>
+      </div>
+    `;
+  }
+
+  function guardarCambiosDesdePanel(datos, listaSecciones) {
+    const cuerpo = document.getElementById("panel-cuerpo");
+    let hayErrorValidacion = false;
+
+    for (const sec of listaSecciones) {
+      const card = cuerpo.querySelector(`[data-card-sec="${CSS.escape(sec.id)}"]`);
+      if (!card) continue;
+
+      const dec = card.dataset.decisionActual || "";
+      const errBox = card.querySelector(".error-validacion-tarjeta");
+      const errJustBox = card.querySelector(".error-justificacion-tarjeta");
+      if (errBox) errBox.style.display = "none";
+      if (errJustBox) errJustBox.style.display = "none";
+
+      if (dec === "NO") {
+        const nom = card.querySelector(".inp-nuevo-nombre").value.trim().toUpperCase();
+        const rutRaw = card.querySelector(".inp-nuevo-rut").value.trim();
+        const perfil = card.querySelector(".sel-perfil-listo").value;
+        const rutNorm = normalizarRut(rutRaw);
+
+        const faltantes = [];
+        if (!nom) faltantes.push("Nombre Nuevo Docente");
+        if (!rutRaw || !rutNorm.clave) faltantes.push("RUT Nuevo Docente válido");
+        if (perfil !== "SI" && perfil !== "NO") faltantes.push("Perfil Listo (SI / NO)");
+
+        if (faltantes.length > 0) {
+          hayErrorValidacion = true;
+          if (errBox) {
+            errBox.textContent = `⚠ Completa obligatoriamente: ${faltantes.join(", ")}.`;
+            errBox.style.display = "block";
+          }
+        }
+      }
+
+      const solTexto = card.querySelector(".inp-solicitud-horario").value.trim();
+      const justTexto = (card.querySelector(".inp-justificacion-horario")?.value || "").trim();
+      if (solTexto && !justTexto) {
+        hayErrorValidacion = true;
+        if (errJustBox) {
+          errJustBox.textContent = "⚠ Debes señalar obligatoriamente la justificación para la solicitud de cambio de horario.";
+          errJustBox.style.display = "block";
+        }
+      }
+    }
+
+    if (hayErrorValidacion) {
+      mostrarToast("⚠ Revisa los campos obligatorios marcados en rojo antes de guardar.");
+      return;
+    }
+
+    // Aplicar cambios validados
+    for (const sec of listaSecciones) {
+      const card = cuerpo.querySelector(`[data-card-sec="${CSS.escape(sec.id)}"]`);
+      if (!card) continue;
+
+      const dec = card.dataset.decisionActual || "";
+      const solTextoRaw = card.querySelector(".inp-solicitud-horario").value.trim();
+      const justTexto = (card.querySelector(".inp-justificacion-horario")?.value || "").trim();
+
+      if (dec === "SI") {
+        sec.confirma = "SI";
+        sec.nuevoDocente = "";
+        sec.nuevoRut = "";
+        sec.perfilListo = "";
+      } else if (dec === "NO") {
+        sec.confirma = "NO";
+        sec.nuevoDocente = card.querySelector(".inp-nuevo-nombre").value.trim().toUpperCase();
+        const rn = normalizarRut(card.querySelector(".inp-nuevo-rut").value.trim());
+        sec.nuevoRut = rn.clave;
+        sec.perfilListo = card.querySelector(".sel-perfil-listo").value;
+      }
+
+      if (solTextoRaw) {
+        const parsedSol = parsearHorario(solTextoRaw);
+        const solNormalizada = parsedSol.slots.length > 0 ? formatearSlotsCompacto(parsedSol.slots) : solTextoRaw;
+        if (solNormalizada !== sec.solicitudHorario || !sec.fechaSolicitudHorario) {
+          sec.fechaSolicitudHorario = formatearFechaHoraAhora();
+        }
+        sec.solicitudHorario = solNormalizada;
+        sec.justificacionHorario = justTexto;
+      } else {
+        sec.solicitudHorario = "";
+        sec.justificacionHorario = "";
+        sec.fechaSolicitudHorario = "";
+      }
+    }
+
+    cerrarPanel();
+    renderizarTodo();
+    mostrarToast("✓ Cambios y justificaciones guardados correctamente.");
+  }
+
+  function cerrarPanel() {
+    document.getElementById("velo-panel").classList.remove("abierto");
+    document.getElementById("panel").classList.remove("abierto");
+  }
+
+  // ============================================================================
+  // 7. MODAL DE GUARDAR / REVISIÓN LISTA Y EXPORTACIÓN .XLSX OFICIAL (17 COLUMNAS)
+  // ============================================================================
+  function abrirModalGuardarYRevisar() {
+    const datos = obtenerDatosActivos();
+    if (!datos) return;
+
+    const totalSec = datos.secciones.length;
+    const confSi = datos.secciones.filter(s => s.confirma === "SI").length;
+    const confNo = datos.secciones.filter(s => s.confirma === "NO").length;
+    const pendientes = datos.secciones.filter(s => s.confirma !== "SI" && s.confirma !== "NO");
+    const conSolicitud = datos.secciones.filter(s => Boolean(s.solicitudHorario && s.solicitudHorario.trim()));
+    const noIncompletos = datos.secciones.filter(s =>
+      s.confirma === "NO" && (!s.nuevoDocente || !s.nuevoRut || (s.perfilListo !== "SI" && s.perfilListo !== "NO"))
+    );
+
+    const todoListo = pendientes.length === 0 && noIncompletos.length === 0;
+    const cuerpoModal = document.getElementById("modal-guardar-cuerpo");
+
+    cuerpoModal.innerHTML = `
+      <div class="item-alerta ${todoListo ? "exito" : "advertencia"}" style="margin-bottom:14px;">
+        <div>
+          <b>${todoListo
+            ? "✓ Revisión completa: todas las secciones tienen pronunciamiento SI o NO."
+            : `⚠ Aún quedan ${pendientes.length} sección(es) pendientes de confirmar (SI / NO).`}</b>
+          <div style="font-size:12px; margin-top:3px; color:var(--texto-2);">
+            Tu planilla base permanece intacta. Puedes descargar el archivo <code>.xlsx</code> actualizado en cualquier momento con todas las confirmaciones y solicitudes registradas en esta sesión.
+          </div>
+        </div>
+      </div>
+
+      <div class="rejilla-kpi" style="margin-bottom:14px;">
+        <div class="kpi" style="--h:150">
+          <div class="etq">Confirmadas (SI)</div>
+          <div class="val bueno">${confSi}</div>
+          <div class="sub">De ${totalSec} secciones TEO</div>
+        </div>
+        <div class="kpi" style="--h:24">
+          <div class="etq">No Confirmadas (NO)</div>
+          <div class="val aviso">${confNo}</div>
+          <div class="sub">Con nuevo docente ingresado</div>
+        </div>
+        <div class="kpi" style="--h:215">
+          <div class="etq">Pendientes</div>
+          <div class="val ${pendientes.length > 0 ? "malo" : "bueno"}">${pendientes.length}</div>
+          <div class="sub">Sin marcar SI / NO</div>
+        </div>
+        <div class="kpi" style="--h:265">
+          <div class="etq">Solicitudes Horario</div>
+          <div class="val">${conSolicitud.length}</div>
+          <div class="sub">Registradas en esta sesión</div>
+        </div>
+      </div>
+
+      ${pendientes.length > 0 ? `
+        <h4 style="margin:10px 0 6px; font-size:12.5px;">Secciones pendientes de pronunciamiento (${pendientes.length}):</h4>
+        <div class="lista-alertas" style="max-height:220px; overflow-y:auto;">
+          ${pendientes.slice(0, 30).map(s => `
+            <div class="item-alerta" style="padding:7px 10px;">
+              <div style="font-size:12px;">
+                <b class="mono">${escaparHtml(s.codigo)} Sec. ${escaparHtml(s.seccion)}</b> · ${escaparHtml(s.asignatura)}
+                <span style="color:var(--texto-2);">(${escaparHtml(s.profPropuesto || "Sin profesor propuesto")})</span>
+              </div>
+              <button type="button" class="enlace-ficha" data-ir-pendiente="${escaparHtml(s.id)}">Gestionar</button>
+            </div>
+          `).join("")}
+          ${pendientes.length > 30 ? `<div style="font-size:11.5px; color:var(--texto-2); padding:4px;">… y ${pendientes.length - 30} secciones pendientes más.</div>` : ""}
+        </div>
+      ` : ""}
+    `;
+
+    cuerpoModal.querySelectorAll("[data-ir-pendiente]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        cerrarModalGuardar();
+        abrirModalGestionSecciones([btn.dataset.irPendiente], "Completar Sección Pendiente");
+      });
+    });
+
+    document.getElementById("modal-resumen-guardar").classList.add("abierto");
+  }
+
+  function cerrarModalGuardar() {
+    document.getElementById("modal-resumen-guardar").classList.remove("abierto");
+  }
+
+  function limpiarSlugArchivo(txt) {
+    return limpiarClaveColumna(txt || "SINDATO").replace(/[^A-Z0-9]+/g, "_").replace(/^_|_$/g, "").slice(0, 42);
+  }
+
+  function obtenerFechaArchivo() {
+    const hoy = new Date();
+    const yyyy = hoy.getFullYear();
+    const mm = String(hoy.getMonth() + 1).padStart(2, "0");
+    const dd = String(hoy.getDate()).padStart(2, "0");
+    return `${yyyy}-${mm}-${dd}`;
+  }
+
+  /**
+   * Genera un nuevo archivo .xlsx sin modificar la planilla base en memoria ni en disco,
+   * incorporando la fecha actual en el nombre del archivo descargable.
+   */
+  function exportarPlanillaOficialXlsx() {
+    const datos = obtenerDatosActivos();
+    if (!datos) return;
+
+    const mapSecciones = new Map(datos.secciones.map(s => [s.id, s]));
+    const mapAyudantias = new Map(datos.ayudantias.map(a => [a.id, a]));
+    const seccionesYaEscritasHorario = new Set();
+
+    const encabezadosOficiales = [
+      "SEDE",
+      "AREA",
+      "TIPO",
+      "CODIGO",
+      "ASIGNATURA",
+      "SECCIÓN",
+      "HORARIO",
+      "PROFESOR PROPUESTO",
+      "RUT DOCENTE",
+      "GRADO ACADÉMICO",
+      "CONFIRMA DOCENTE",
+      "NOMBRE NVO DOCENTE",
+      "RUT NVO DOCENTE",
+      "PERFIL LISTO",
+      "N° INGRESO (GOA)",
+      "COMENTARIOS (GOA)",
+      "SOLICITUDES",
+      "JUSTIFICACIÓN SOLICITUD"
+    ];
+
+    const filasSalida = [encabezadosOficiales];
+
+    for (const fOrig of datos.filasOriginales) {
+      const gestionada = mapSecciones.get(fOrig.claveRegistro) || mapAyudantias.get(fOrig.claveRegistro);
+
+      let horarioCeldaOut = fOrig.horario || "";
+      let confirmaOut = fOrig.confirmaDocente || "";
+      let nvoDocOut = fOrig.nombreNvoDocente || "";
+      let nvoRutOut = fOrig.rutNvoDocente || "";
+      let perfilOut = fOrig.perfilListo || "";
+      let comentariosGoaOut = fOrig.comentariosGoa || "";
+      let solicitudesOut = fOrig.solicitudes || "";
+      let justificacionOut = fOrig.justificacion || "";
+
+      if (gestionada) {
+        confirmaOut = gestionada.confirma || "";
+        if (gestionada.confirma === "NO") {
+          nvoDocOut = gestionada.nuevoDocente || "";
+          nvoRutOut = normalizarRut(gestionada.nuevoRut).clave || gestionada.nuevoRut || "";
+          perfilOut = gestionada.perfilListo || "";
+        } else if (gestionada.confirma === "SI") {
+          nvoDocOut = "";
+          nvoRutOut = "";
+          perfilOut = "";
+        }
+
+        if (gestionada.solicitudHorario && gestionada.solicitudHorario.trim()) {
+          const nuevoHorarioTexto = gestionada.solicitudHorario.trim();
+          const horarioPrevioTexto = gestionada.horarioConsolidado || fOrig.horario || "Sin horario";
+          const fechaHoraTexto = gestionada.fechaSolicitudHorario || formatearFechaHoraAhora();
+
+          // Reemplazo inmediato en la columna HORARIO con color de celda s: 2 (amarillo suave) para filtrar por color
+          if (!seccionesYaEscritasHorario.has(fOrig.claveRegistro)) {
+            horarioCeldaOut = { v: nuevoHorarioTexto, s: 2 };
+            seccionesYaEscritasHorario.add(fOrig.claveRegistro);
+          } else {
+            horarioCeldaOut = { v: "", s: 2 };
+          }
+
+          solicitudesOut = nuevoHorarioTexto;
+          justificacionOut = gestionada.justificacionHorario || "";
+
+          const constanciaGoa = `Solicitud cambio horario (${fechaHoraTexto}) · Horario original modificado: ${horarioPrevioTexto}`;
+          if (!comentariosGoaOut.includes("Horario original modificado:")) {
+            comentariosGoaOut = comentariosGoaOut
+              ? `${comentariosGoaOut} | ${constanciaGoa}`
+              : constanciaGoa;
+          }
+        } else {
+          solicitudesOut = "";
+          justificacionOut = "";
+        }
+      }
+
+      filasSalida.push([
+        fOrig.sede || datos.sede,
+        fOrig.area || "",
+        fOrig.tipo || "",
+        fOrig.codigo || "",
+        fOrig.asignatura || "",
+        fOrig.seccion || "",
+        horarioCeldaOut,
+        fOrig.profPropuesto || "",
+        normalizarRut(fOrig.rutDocente).clave || fOrig.rutDocente || "",
+        fOrig.gradoAcademico || "",
+        confirmaOut,
+        nvoDocOut,
+        nvoRutOut,
+        perfilOut,
+        fOrig.numIngresoGoa || "",
+        comentariosGoaOut,
+        solicitudesOut,
+        justificacionOut
+      ]);
+    }
+
+    const anchos = [15, 14, 8, 11, 34, 9, 24, 32, 13, 20, 17, 32, 16, 13, 16, 42, 26, 40];
+    const nombreBase = datos.nombreArchivo.replace(/\.xlsx$/i, "");
+    const fechaArchivo = obtenerFechaArchivo();
+    const nombreDescarga = `${nombreBase}_CONFIRMADA_${fechaArchivo}.xlsx`;
+
+    const blob = generarBlobXlsxNativo([{
+      nombre: "Planilla Control",
+      filaEncabezado: 0,
+      anchos,
+      filas: filasSalida
+    }]);
+
+    descargarBlobArchivo(blob, nombreDescarga);
+    mostrarToast(`⬇ Descargando ${nombreDescarga}`);
+  }
+
+  // ============================================================================
+  // 8. CARGA DE ARCHIVOS Y VINCULACIÓN DE EVENTOS
+  // ============================================================================
+  async function manejarArchivosSeleccionados(fileList) {
+    if (!fileList || fileList.length === 0) return;
+    const msgError = document.getElementById("mensaje-error-carga");
+    msgError.style.display = "none";
+
+    for (const file of Array.from(fileList)) {
+      try {
+        const hojas = await leerLibroXlsx(file);
+        const procesado = procesarDatosPlanilla(file.name, hojas);
+        const idxExistente = archivosCargados.findIndex(a => a.nombreArchivo === file.name);
+        if (idxExistente >= 0) {
+          archivosCargados[idxExistente] = procesado;
+          indiceArchivoActivo = idxExistente;
+        } else {
+          archivosCargados.push(procesado);
+          indiceArchivoActivo = archivosCargados.length - 1;
+        }
+      } catch (err) {
+        msgError.textContent = `Error en "${file.name}": ${err.message || err}`;
+        msgError.style.display = "inline-block";
+      }
+    }
+
+    if (archivosCargados.length > 0) {
+      renderizarTodo();
+    }
+  }
+
+  // Tema claro / oscuro
+  document.getElementById("tema").addEventListener("click", () => {
+    const htmlEl = document.documentElement;
+    const actual = htmlEl.getAttribute("data-tema");
+    htmlEl.setAttribute("data-tema", actual === "oscuro" ? "claro" : "oscuro");
+  });
+
+  // Carga de archivos Excel
+  const inputXlsx = document.getElementById("input-xlsx");
+  document.getElementById("btn-cargar-xlsx").addEventListener("click", () => inputXlsx.click());
+  document.getElementById("btn-cargar-central").addEventListener("click", () => inputXlsx.click());
+  inputXlsx.addEventListener("change", (e) => {
+    manejarArchivosSeleccionados(e.target.files);
+    inputXlsx.value = "";
+  });
+
+  // Drag & Drop en ventana
+  const zonaInicial = document.getElementById("vista-vacia");
+  window.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    zonaInicial.classList.add("arrastrando");
+  });
+  window.addEventListener("dragleave", () => {
+    zonaInicial.classList.remove("arrastrando");
+  });
+  window.addEventListener("drop", (e) => {
+    e.preventDefault();
+    zonaInicial.classList.remove("arrastrando");
+    if (e.dataTransfer && e.dataTransfer.files) {
+      manejarArchivosSeleccionados(e.dataTransfer.files);
+    }
+  });
+
+  // Navegación entre pestañas
+  document.querySelectorAll("#nav-tabs button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      if (!btn.disabled) activarPestana(btn.dataset.tab);
+    });
+  });
+
+  // Restablecer cambios temporales al estado original de la planilla base
+  document.getElementById("btn-reiniciar-sesion").addEventListener("click", () => {
+    const datos = obtenerDatosActivos();
+    if (!datos) return;
+    restaurarEstadoOriginalPlanilla(datos);
+    renderizarTodo();
+    mostrarToast("↺ Cambios temporales descartados; planilla base restaurada.");
+  });
+
+  // Botones de Guardar / Revisión Lista y Descarga Oficial (.xlsx)
+  document.getElementById("btn-finalizar-revision").addEventListener("click", abrirModalGuardarYRevisar);
+  document.getElementById("btn-resumen-guardar").addEventListener("click", abrirModalGuardarYRevisar);
+  document.getElementById("btn-descargar-oficial").addEventListener("click", exportarPlanillaOficialXlsx);
+  document.getElementById("btn-descargar-informe-resumen").addEventListener("click", exportarPlanillaOficialXlsx);
+  document.getElementById("btn-descargar-secciones-xlsx").addEventListener("click", exportarPlanillaOficialXlsx);
+
+  // Eventos del Modal de Guardar / Revisión Lista
+  document.getElementById("btn-cerrar-modal-guardar").addEventListener("click", cerrarModalGuardar);
+  document.getElementById("btn-modal-seguir-editando").addEventListener("click", cerrarModalGuardar);
+  document.getElementById("btn-modal-descargar-xlsx").addEventListener("click", () => {
+    cerrarModalGuardar();
+    exportarPlanillaOficialXlsx();
+  });
+
+  // Filtros en Secciones
+  ["filtro-sec-texto", "filtro-sec-anio", "filtro-sec-area", "filtro-sec-jornada", "filtro-sec-estado"].forEach(id => {
+    const el = document.getElementById(id);
+    el.addEventListener(el.tagName === "INPUT" ? "input" : "change", () => {
+      const datos = obtenerDatosActivos();
+      if (datos) renderizarTablaSecciones(datos);
+    });
+  });
+
+  // Controles en Horario M1-M20
+  document.querySelectorAll("#segmento-modo-horario button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll("#segmento-modo-horario button").forEach(b => b.classList.remove("activo"));
+      btn.classList.add("activo");
+      modoHorarioActual = btn.dataset.modo;
+      const datos = obtenerDatosActivos();
+      if (datos) {
+        inicializarControlesHorario(datos);
+        renderizarGrillaHorario(datos);
+      }
+    });
+  });
+
+  ["selector-horario-principal", "selector-horario-jornada"].forEach(id => {
+    document.getElementById(id).addEventListener("change", () => {
+      const datos = obtenerDatosActivos();
+      if (datos) renderizarGrillaHorario(datos);
+    });
+  });
+
+  document.getElementById("btn-zoom-out").addEventListener("click", () => aplicarZoomHorario(nivelZoomHorario - 10));
+  document.getElementById("btn-zoom-in").addEventListener("click", () => aplicarZoomHorario(nivelZoomHorario + 10));
+  document.getElementById("btn-zoom-reset").addEventListener("click", () => aplicarZoomHorario(100));
+  document.getElementById("btn-zoom-panoramica").addEventListener("click", () => aplicarZoomHorario(65));
+  document.getElementById("btn-descargar-xlsx").addEventListener("click", exportarHorarioContingenteXlsx);
+
+  // Filtros y descarga en Ayudantías (AYI)
+  ["filtro-ayi-texto", "filtro-ayi-area", "filtro-ayi-estado"].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener(el.tagName === "INPUT" ? "input" : "change", () => {
+      const datos = obtenerDatosActivos();
+      if (datos) renderizarAyudantias(datos);
+    });
+  });
+
+  document.getElementById("btn-descargar-ayi-xlsx").addEventListener("click", () => {
+    const datos = obtenerDatosActivos();
+    if (!datos) return;
+    const filtradas = obtenerAyudantiasFiltradas(datos);
+    const filas = [[
+      "Código", "Asignatura", "Sección", "Año", "Semestre", "Área",
+      "Ayudante Propuesto", "RUT", "Cumplimiento"
+    ]];
+    for (const a of filtradas) {
+      filas.push([
+        a.codigo, a.asignatura, a.seccion,
+        a.anio > 0 ? `${a.anio}° Año` : "Sin malla",
+        a.semestre > 0 ? `Semestre ${a.semestre}` : "Sin malla",
+        a.area,
+        a.profPropuesto || "Sin nombre",
+        a.rutPropFormateado || "Sin RUT",
+        a.cumple ? "Completo" : "Incompleto"
+      ]);
+    }
+    const blob = generarBlobXlsxNativo([{
+      nombre: "Ayudantías AYI",
+      filaEncabezado: 0,
+      anchos: [11, 36, 9, 11, 12, 18, 30, 15, 16],
+      filas
+    }]);
+    descargarBlobArchivo(blob, `Ayudantias_AYI_${limpiarSlugArchivo(datos.sede)}_${obtenerFechaArchivo()}.xlsx`);
+  });
+
+  // Cerrar panel lateral y modales
+  document.getElementById("btn-cerrar-panel").addEventListener("click", cerrarPanel);
+  document.getElementById("velo-panel").addEventListener("click", cerrarPanel);
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      cerrarPanel();
+      cerrarModalGuardar();
+    }
+  });
+})();
+</script>
+</body>
+</html>
